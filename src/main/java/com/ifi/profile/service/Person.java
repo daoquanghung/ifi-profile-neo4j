@@ -19,14 +19,29 @@ public class Person {
 
 	// Driver objects are thread-safe and are typically made available application-wide.
     Driver driver;
-
+    
+    public static final String uri = "bolt://localhost:7687";
+    public static final String user = "neo4j";
+    public static final String password = "11111111";
+    
     public Person(String uri, String user, String password)
     {
         driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));
     }
 
-    public void addPerson(String name)
-    {
+    // set constraint for person
+    public void addConstraint(){
+    	try(Session session = driver.session()){
+    		try(Transaction tx = session.beginTransaction()){
+    			tx.run("CREATE CONSTRAINT ON (p:Person) ASSERT p.id IS UNIQUE");
+    			tx.success();
+    		}
+    	}
+    }
+    
+   
+    public User addPersonName(String name){
+    	User user = new User();
         // Sessions are lightweight and disposable connection wrappers.
         try (Session session = driver.session())
         {
@@ -38,10 +53,79 @@ public class Person {
                 tx.success();  // Mark this write as successful.
             }
         }
+        
+        return user;
     }
+    
+    // add person id
+    public User addPersonId(String name, String id){
+    	User user = new User();
+		try(Session session = driver.session()){
+			try(Transaction tx = session.beginTransaction()){
+				tx.run("MATCH (p:Person{name: $name}) " +
+						"SET p.id= $id",
+						parameters("name", name, "id",id));
+				tx.success();
+			}
+		}
+		return user;
+	}
+    
+    // add person title
+    public User addPersonTitle(String name, String title){
+    	User user = new User();
+		try(Session session = driver.session()){
+			try(Transaction tx = session.beginTransaction()){
+				tx.run("MATCH (p:Person{name: $name}) " +
+						"SET p.title= $title",
+						parameters("name", name, "title",title));
+				tx.success();
+			}
+		}
+		return user;
+	}
+    
+    // add person birthday
+    public User addPersonBirthday(String name, String birthday){
+		User user = new User();
+    	try(Session session = driver.session()){
+			try(Transaction tx = session.beginTransaction()){
+				tx.run("MATCH (p:Person{name: $name}) " +
+						"SET p.birthday= $birthday",
+						parameters("name", name, "birthday",birthday));
+				tx.success();
+			}
+		}
+    	return user;
+	}
+    
+    public User addPersonJoin(String name, String join){
+		User user = new User();
+    	try(Session session = driver.session()){
+			try(Transaction tx = session.beginTransaction()){
+				tx.run("MATCH (p:Person{name: $name}) " +
+						"SET p.join= $join",
+						parameters("name", name, "join",join));
+				tx.success();
+			}
+		}
+    	return user;
+	}
+    
+    public User addPersonStatus(String name, String status){
+		User user = new User();
+    	try(Session session = driver.session()){
+			try(Transaction tx = session.beginTransaction()){
+				tx.run("MATCH (p:Person{name: $name}) " +
+						"SET p.status= $status",
+						parameters("name", name, "status",status));
+				tx.success();
+			}
+		}
+    	return user;
+	}
 
-    public void printPeople(String initial)
-    {
+    public void printPeople(String initial){
         try (Session session = driver.session())
         {
             // Auto-commit transactions are a quick and easy way to wrap a read.
@@ -58,6 +142,20 @@ public class Person {
         }
     }
     
+ // remove person 
+ 	public User removePerson(String name){
+ 		User user = new User();
+ 		try(Session session = driver.session()){
+ 			try(Transaction tx = session.beginTransaction()){
+ 				tx.run("MATCH (p:Project{name: $name}) DETACH DELETE p",parameters("name",name));
+ 				tx.success();
+ 			}
+ 		}
+ 		return user;
+ 	}
+      	
+ 		
+ 	
     public List<User> getListPeople(String initial)
     {
     	List<User> ret = new ArrayList<User>();
@@ -80,7 +178,9 @@ public class Person {
         
         return ret;
     }
-
+    
+    
+     
     public void close()
     {
         // Closing a driver immediately shuts down all open connections.

@@ -8,6 +8,7 @@
 <title>User Home Page</title>
 </head>
 <body>
+<jsp:include page="_header.jsp"></jsp:include>
 <h3>List people start by "${userName}":</h3>
 	<c:if test="${not empty lists}">
 
@@ -18,5 +19,6 @@
 		</ul>
 
 	</c:if>
+	
 </body>
 </html>
