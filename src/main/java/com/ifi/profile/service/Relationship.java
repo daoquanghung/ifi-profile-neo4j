@@ -14,10 +14,6 @@ import org.neo4j.driver.StatementResult;
 import org.neo4j.driver.Transaction;
 
 import com.ifi.profile.model.Rela;
-import com.ifi.profile.model.Tech;
-import com.ifi.profile.model.User;
-import com.ifi.profile.model.Task;
-import com.ifi.profile.model.Office;
 
 public class Relationship {
 	Driver driver;
@@ -59,14 +55,16 @@ public class Relationship {
 	}
 	
 	// relationship between project and technology
-	public Rela relaProjectTech(String project, String techName){
+	public Rela relaProTech(String techName, String project){
 		Rela rela = new Rela();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
-				tx.run("MATCH (p:Project{project:$project}) " +
-						"MATCH (t:Technology{name:$tech_name}) " +
-						"CREATE (t)-[r:USED_IN]->(p)",
-						parameters("project", project, "tech_name", techName));
+				tx.run("MATCH (t:Technology{technology: $technology}) " +
+						"MATCH (P:Project{project: $project}) " +
+						"CREATE (t)-[:USED_IN]->(P)",
+						parameters("technology", techName, "project", project)
+						);
+				tx.success();
 			}
 		}
 		return rela;
@@ -86,14 +84,16 @@ public class Relationship {
 	}
 	
 	// relationship between person and technology
-	public Rela relaPersonTech(String userName, String techName){
+	public Rela relaPerTech(String userName, String techName){
 		Rela rela = new Rela();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
-				tx.run("MATCH (p:Person{name:$userName}) " +
-						"MATCH (t:Technology{name:$tech_name}) " +
+				tx.run("MATCH (p:Person{name: $name}) " +
+						"MATCH (t:Technology{technology: $technology}) " +
 						"CREATE (p)-[r:HAS_EXPERIENCE]->(t)",
-						parameters("userName", userName, "tech_name", techName));
+						parameters("name", userName, "technology", techName)
+						);
+				tx.success();
 			}
 		}
 		return rela;
@@ -113,19 +113,20 @@ public class Relationship {
 	}
 	
 	// relationship between person and project
-	public Rela relaPersonProject(String userName, String project){
+	public Rela relaPerPro(String userName, String project){
 		Rela rela = new Rela();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
-				tx.run("MATCH (p:Person{name:$userName}) " +
-						"MATCH (b:Project{project:$project}) " +
-						"CREATE (p)-[r:WORK_IN]->(b)",
-						parameters("userName", userName, "project", project));
+				tx.run("MATCH (p:Person{name: $name}) " +
+						"MATCH (P:Project{project: $project}) " +
+						"CREATE (p)-[r:WORK_IN]->(P)",
+						parameters("name", userName, "project", project)
+						);
+				tx.success();
 			}
 		}
 		return rela;
-	}
-	
+	}	
 	// print out rela btw person and project
 	public Rela printRelaPP(){
 		Rela rela = new Rela();
@@ -144,8 +145,8 @@ public class Relationship {
 		Rela rela = new Rela();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
-				tx.run("MATCH (p:Person{name:$userName}) " +
-						"MATCH (P:Project{project:$project}) " +
+				tx.run("MATCH (p:Person{name: $userName}) " +
+						"MATCH (P:Project{project: $project}) " +
 						"CREATE (p)-[r:LEAD]->(P)",
 						parameters("userName", userName, "project", project));
 			}

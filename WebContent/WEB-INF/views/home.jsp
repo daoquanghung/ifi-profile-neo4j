@@ -67,6 +67,7 @@ body {font-family: "Lato", sans-serif;}
   font-size: 20px;
 }
 
+
 /* Form */
 input[type = text], select, textarea{
 	width: 100%;
@@ -157,12 +158,30 @@ input[type = submit]:hover{
 		<h1>Add department</h1>
 		<p></p>
 		<p>The time on the server is ${serverTime}.</p>
-		
+		<div class="container">
 		<form action="department" method="get">
-			Department	<br><input type="text" name="department"><br>
-			Description	<br><input type="text" name="description"><br>
+			<div class="row">
+        		<div class="col-25">
+        			<label for="department">Department</label>
+        		</div>
+        		<div class="col-75">
+        			<input type="text" id="department" name="department" placeholder="Enter department...">
+        		</div>
+        	</div>
+        	
+        	<div class="row">
+        		<div class="col-25">
+        			<label for="description">Description</label>
+        		</div>
+        		<div class="col-75">
+        			<input type="text" id="description" name="description" placeholder="Enter department description...">
+        		</div>
+        	</div>
+        	
+        			
 			<input type="submit" value="submit"><br>
 		</form>
+		</div>
 	</div>
 	
 	
@@ -256,13 +275,48 @@ input[type = submit]:hover{
 		
 		<div>
 			<h2>Add Technology</h2>
+			<div class="container">
 			<form action="techForm" method="get">
-				Name		<br><input type="text" name="techName"><br>
-				Description <br><input type="text" name="techDescription"><br>
-				Category	<br><input type="text" name="techCategory"><br>
-				Domain		<br><input type="text" name="techDomain"><br>
+				<!-- Tech name -->
+				<div class="row">
+        			<div class="col-25">
+        				<label for="techName">Technology name</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="techName" name="techName" placeholder="Enter name of technology...">
+        			</div>
+        		</div>
+        	
+				<!-- Tech description -->
+				<div class="row">
+        			<div class="col-25">
+        				<label for="techDescription">Description</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="techDescription" name="techDescription" placeholder="Enter technology description...">
+        			</div>
+        		</div>
+				<!-- Tech category -->
+				<div class="row">
+        			<div class="col-25">
+        				<label for="techCategory">Category</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="techCategory" name="techCategory" placeholder="Enter technology category...">
+        			</div>
+        		</div>
+				<!-- Tech domain -->
+				<div class="row">
+        			<div class="col-25">
+        				<label for="techDomain">Domain</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="techDomain" name="techDomain" placeholder="Enter technology domain...">
+        			</div>
+        		</div>
 				<input type="submit" value="submit"><br>
 			</form>
+			</div>
 		</div>
 		
 	</div>
@@ -272,18 +326,83 @@ input[type = submit]:hover{
 		<p>The time on the server is ${serverTime}.</p>
 		
 		<h2>Add Project</h2>
+		<div class="container">
         	<form action="project" method="get">
-        		Project Name <br><input type="text" name="project"><br>
-        		Project ID 	 <br><input type="text" name="chargeId"><br>
-        		Status 		 <br><input type="text" name="proStatus"><br>
-        		Description  <br><input type="text" name="proDescription"><br>
-        		Domain 		 <br><input type="text" name="proDomain"><br>
-        		Start Date 	 <br><input type="text" name="startDate"><br>
-        		Finish Date	 <br><input type="text" name="finishDate"><br>
-        		Customer	 <br><input type="text" name="customer"><br>
+        		<!-- project name -->
+        		<div class="row">
+        			<div class="col-25">
+        				<label for="project">Project</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="project" name="project" placeholder="Enter project...">
+        			</div>
+        		</div>
+        		<!-- project id -->
+        		<div class="row">
+        			<div class="col-25">
+        				<label for="chargeId">Project Id</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="chargeId" name="chargeId" placeholder="Enter project Id...">
+        			</div>
+        		</div>
+        		<!-- project status -->
+        		<div class="row">
+        			<div class="col-25">
+        				<label for="proStatus">Status</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="proStatus" name="proStatus" placeholder="Enter project status...">
+        			</div>
+        		</div>
+        		<!-- project description -->
+        		<div class="row">
+        			<div class="col-25">
+        				<label for="proDescription">Description</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="proDescription" name="proDescription" placeholder="Enter project description...">
+        			</div>
+        		</div>
+        		<!-- project domain -->
+        		<div class="row">
+        			<div class="col-25">
+        				<label for="proDomain">Domain</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="proDomain" name="proDomain" placeholder="Enter project domain...">
+        			</div>
+        		</div>
+        		<!-- project start date -->
+        		<div class="row">
+        			<div class="col-25">
+        				<label for="startDate">Start Date</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="startDate" name="startDate" placeholder="Project start from...">
+        			</div>
+        		</div>
+        		<!-- project finish date -->
+        		<div class="row">
+        			<div class="col-25">
+        				<label for="finishDate">Finish Date</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="finishDate" name="finishDate" placeholder="To...">
+        			</div>
+        		</div>
+        		<!-- customer -->
+        		<div class="row">
+        			<div class="col-25">
+        				<label for="customer">Customer</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="customer" name="customer" placeholder="Customer...">
+        			</div>
+        		</div>
         		<input type="submit" value="submit"><br>
         	</form>
-		
+		</div>
 	</div>
 	
 	<!-- Relationship page -->
@@ -293,18 +412,20 @@ input[type = submit]:hover{
 			Person Name	<input type="text" name="userName">
 			Department	<input type="text" name="department">
 			<input type="submit" value="submit"><br>
+		</form>
+		<form action="relation" method="get">
 			<p>Relation between Project and Technology</p>
-			Project		<input type="text" name="project">
 			Technology	<input type="text" name="techName">
+			Project		<input type="text" name="project">
 			<input type="submit" value="submit"><br>
+		</form>
+		<form action="relation" method="get">
 			<p>Relation between Person and Project(work in)</p>
 			Person Name	<input type="text" name="userName">
 			Project		<input type="text" name="project">
 			<input type="submit" value="submit"><br>
-			<p>Relation between Person and Project(lead)</p>
-			Project		<input>
-			Project		<input>
-			<input type="submit" value="submit"><br>
+		</form>
+		<form action="relation"	method="get">
 			<p>Relation between Person and Technology</p>
 			Person Name	<input type="text" name="userName">
 			Technology	<input type="text" name="techName">
@@ -331,4 +452,5 @@ input[type = submit]:hover{
 	</script>
 	
 </body>
+
 </html>

@@ -33,8 +33,8 @@ public class Technology {
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
 				tx.run(//"CREATE CONSTRAINT ON (t:Technology) ASSERT t.name IS UNIQUE" +
-						"MERGE(t:Technology{name:$name})",
-						parameters("name",techName));
+						"MERGE(t:Technology{technology:$technology})",
+						parameters("technology",techName));
 				tx.success();
 			}
 		}
@@ -42,13 +42,13 @@ public class Technology {
 	}
 	
 	// add or update properties for tech
-	public Tech addTechDescription(String techName, String techDescription){
+	public Tech addTechDescription(String techName, String description){
 		Tech tech = new Tech();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
-				tx.run("MATCH (t:Techonology{name: $name})"+
-						"SET t.description= $description",
-						parameters("name",techName ,"description", techDescription));
+				tx.run("MATCH (t:Technology{technology:$technology})"+
+						"SET t.description = $description",
+						parameters("technology",techName ,"description", description));
 				tx.success();
 			}
 		}
@@ -56,26 +56,26 @@ public class Technology {
 	}
 	
 	
-	public Tech addTechCategory(String techName, String techCategory){
+	public Tech addTechCategory(String techName, String category){
 		Tech tech = new Tech();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
-				tx.run("MATCH (t:Techonology{name: $name})"+
-						"SET t.category= $category",
-						parameters("name",techName ,"category", techCategory));
+				tx.run("MATCH (t:Technology{technology:$technology})"+
+						"SET t.category = $category",
+						parameters("technology",techName ,"category", category));
 				tx.success();
 			}
 		}
 		return tech;
 	}
 	
-	public Tech addTechDomain(String techName, String techDomain){
+	public Tech addTechDomain(String techName, String domain){
 		Tech tech = new Tech();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
-				tx.run("MATCH (t:Techonology{name: $name})"+
+				tx.run("MATCH (t:Technology{technology:$technology})"+
 						"SET t.domain= $domain",
-						parameters("name",techName ,"domain", techDomain));
+						parameters("technology",techName ,"domain", domain));
 				tx.success();
 			}
 		}

@@ -109,10 +109,10 @@ public class HomeController {
 		
 		technology.close();
 		
-		model.addAttribute("techName", addTechName);
+		model.addAttribute("addTechName", addTechName);
 		model.addAttribute("addDescription", addDescription);
 		model.addAttribute("addCategory", addCategory);
-		model.addAttribute("techDomain", addDomain);
+		model.addAttribute("addDomain", addDomain);
 		return "techForm";
 	}
 	
@@ -160,13 +160,11 @@ public class HomeController {
 		// relation between person and department
 		Rela relaPerDe = relate.relaPersonDepart(rela.getUserName(), rela.getDepartment());
 		// relation between project and technology
-		Rela relaProTech = relate.relaProjectTech(rela.getProject(), rela.getTechName());
+		Rela relaProTech = relate.relaProTech(rela.getTechName(), rela.getProject());
 		//relation between person and technology
-		Rela relaPerTech = relate.relaPersonTech(rela.getUserName(), rela.getTechName());
+		Rela relaPerTech = relate.relaPerTech(rela.getUserName(), rela.getTechName());
 		// relation between person and project (work in)
-		Rela relaPerPro = relate.relaPersonProject(rela.getUserName(), rela.getProject());
-		// relation between person and project (lead)
-		Rela relaPerPro2 = relate.relaPersonProject2(rela.getUserName(), rela.getProject());
+		Rela relaPerPro = relate.relaPerPro(rela.getUserName(), rela.getProject());
 		
 		relate.close();
 		
@@ -174,7 +172,7 @@ public class HomeController {
 		model.addAttribute("relaProTech", relaProTech);
 		model.addAttribute("relaPerTech", relaPerTech);
 		model.addAttribute("relaPerPro", relaPerPro);
-		model.addAttribute("relaPerPro2", relaPerPro2);
+		
 		
 		return "relation";
 	}

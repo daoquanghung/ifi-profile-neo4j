@@ -2,8 +2,7 @@ package com.ifi.profile.service;
 
 import static org.neo4j.driver.Values.parameters;
 
-import java.util.ArrayList;
-import java.util.List;
+
 
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
