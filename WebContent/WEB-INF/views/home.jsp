@@ -156,7 +156,6 @@ input[type = submit]:hover{
 	<!-- Home page -->
 	<div id="Home" class="tabcontent">
 		<h1>Add department</h1>
-		<p></p>
 		<p>The time on the server is ${serverTime}.</p>
 		<div class="container">
 		<form action="department" method="get">
@@ -175,6 +174,51 @@ input[type = submit]:hover{
         		</div>
         		<div class="col-75">
         			<input type="text" id="description" name="description" placeholder="Enter department description...">
+        		</div>
+        	</div>
+        	
+        			
+			<input type="submit" value="submit"><br>
+		</form>
+		</div>
+		
+		<!-- Remove department -->
+		<div>
+			<h2>Remove department</h2>
+			<form action="removeDepartment" method="get">
+				Department name:	<input type="text" name="department">
+				<input type="submit" value="Remove"><br>
+			</form>
+		</div>
+		
+		<!-- Search department -->
+		<div>
+			<h2>Search department</h2>
+			<form action="searchDep" method="get">
+				Department name: <input type="text" name="department">
+				<input type="submit" value="Search">
+			</form>
+		</div>
+		
+		<!-- Update department -->
+		<h1>Update department</h1>
+		<div class="container">
+		<form action="department" method="get">
+			<div class="row">
+        		<div class="col-25">
+        			<label for="department">Department</label>
+        		</div>
+        		<div class="col-75">
+        			<input type="text" id="department" name="department" placeholder="Enter department...">
+        		</div>
+        	</div>
+        	
+        	<div class="row">
+        		<div class="col-25">
+        			<label for="description">Description</label>
+        		</div>
+        		<div class="col-75">
+        			<input type="text" id="description" name="description">
         		</div>
         	</div>
         	
@@ -267,6 +311,92 @@ input[type = submit]:hover{
         			</form>
         		</div>
 		</div>
+		
+		<!-- Search person -->
+		<div>
+			<h2>Search person</h2>
+			<form action="searchPerson" method="get">
+				Name: <input type="text" name="userName">
+				<input type="submit" value="Submit">
+			</form>
+		</div>
+		
+		<!-- Update person -->
+		<h2>Update person</h2>
+		<div class="container">
+			
+			<form name="myForm" action="form" onsubmit="return validate()" method="get">
+        			<!-- Person name -->
+        			<div class="row">
+        				<div class="col-25">
+        					<label for="name">Person Name</label>
+        				</div>
+        				<div class="col-75">
+        					<input type="text" id="name" name="userName" placeholder="Enter person name...">
+        				</div>
+        			</div>
+        			
+        			<!-- Person Id -->
+        			<div class="row">
+        				<div class="col-25">
+        					<label for="id">Person Id</label>
+        				</div>
+        				<div class="col-75">
+        					<input type="text" id="id" name="userId" placeholder="Enter person id...">
+        				</div>
+        			</div>
+        			
+        			<!-- Person title -->
+        			<div class="row">
+        				<div class="col-25">
+        					<label for="title">Title</label>
+        				</div>
+        				<div class="col-75">
+        					<input type="text" id="title" name="title">
+        				</div>
+        			</div>
+        			
+        			<!-- Person birthday -->
+        			<div class="row">
+        				<div class="col-25">
+        					<label for="birthday">Birthday</label>
+        				</div>
+        				<div class="col-75">
+        					<input type="text" id="birthday" name="birthday">
+        				</div>
+        			</div>
+        			
+        			<!-- Join -->
+        			<div class="row">
+        				<div class="col-25">
+        					<label for="join">Join</label>
+        				</div>
+        				<div class="col-75">
+        					<input type="text" id="join" name="join">
+        				</div>
+        			</div>
+        			
+        			<!-- Status -->
+        			<div class="row">
+        				<div class="col-25">
+        					<label for="status">Status</label>
+        				</div>
+        				<div class="col-75">
+        					<input type="text" id="status" name="status">
+        				</div>
+        			</div>
+        			<input type="submit" value="Update"><br>
+        			</form>
+		</div>
+		
+		<!-- Remove person -->
+		<div>
+			<h2>Remove person</h2>
+			<form action="remove" method="get">
+				Person Id:	<input type="text" name="userId">
+				<input type="submit" value="Remove"><br>
+			</form>
+		</div>
 	</div>
 	
 	<!-- Technology page -->
@@ -319,7 +449,74 @@ input[type = submit]:hover{
 			</div>
 		</div>
 		
+		<!-- Remove Technology -->
+		<div>
+			<h2>Remove technology</h2>
+			<form action="removeTech" method="get">
+				Technology Name:	<input type="text" name="techName">
+				<input type="submit" value="Remove"><br>
+			</form>
+		</div>
+		
+		<!-- Search tech -->
+		<div>
+			<h2>Search Technology</h2>
+			<form action="searchTech" method="get">
+				Name: <input type="text" name="techName">
+				<input type="submit" value="Search">
+			</form>
+		</div>
+		
+		<!-- Update Technology -->
+		<div>
+			<h2>Update Technology</h2>
+			<div class="container">
+			<form action="techForm" method="get">
+				<!-- Tech name -->
+				<div class="row">
+        			<div class="col-25">
+        				<label for="techName">Technology name</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="techName" name="techName" placeholder="Enter name of technology...">
+        			</div>
+        		</div>
+        	
+				<!-- Tech description -->
+				<div class="row">
+        			<div class="col-25">
+        				<label for="techDescription">Description</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="techDescription" name="techDescription">
+        			</div>
+        		</div>
+				<!-- Tech category -->
+				<div class="row">
+        			<div class="col-25">
+        				<label for="techCategory">Category</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="techCategory" name="techCategory">
+        			</div>
+        		</div>
+				<!-- Tech domain -->
+				<div class="row">
+        			<div class="col-25">
+        				<label for="techDomain">Domain</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="techDomain" name="techDomain">
+        			</div>
+        		</div>
+				<input type="submit" value="submit"><br>
+			</form>
+			</div>
+		</div>
+		
 	</div>
+		
+		
 	
 	<!-- Project page -->
 	<div id="Projects" class="tabcontent">
@@ -398,6 +595,104 @@ input[type = submit]:hover{
         			</div>
         			<div class="col-75">
         				<input type="text" id="customer" name="customer" placeholder="Customer...">
+        			</div>
+        		</div>
+        		<input type="submit" value="submit"><br>
+        	</form>
+		</div>
+		
+		<!-- Remove project -->
+		<div>
+			<h2>Remove project</h2>
+			<form action="removeProject" method="get">
+				Project name:	<input type="text" name="project">
+				<input type="submit" value="Remove"><br>
+			</form>
+		</div>
+		
+		<!-- Search project -->
+		<div>
+			<h2>Search Project</h2>
+			<form action="searchProject" method="get">
+				ID of project: <input type="text" name="chargeId">
+				<input type="submit" value="Search">
+			</form>
+		</div>
+		
+		<!-- Update project -->
+		<h2>Update Project</h2>
+		<div class="container">
+        	<form action="project" method="get">
+        		<!-- project name -->
+        		<div class="row">
+        			<div class="col-25">
+        				<label for="project">Project</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="project" name="project" placeholder="Enter project...">
+        			</div>
+        		</div>
+        		<!-- project id -->
+        		<div class="row">
+        			<div class="col-25">
+        				<label for="chargeId">Project Id</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="chargeId" name="chargeId" placeholder="Enter project Id...">
+        			</div>
+        		</div>
+        		<!-- project status -->
+        		<div class="row">
+        			<div class="col-25">
+        				<label for="proStatus">Status</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="proStatus" name="proStatus">
+        			</div>
+        		</div>
+        		<!-- project description -->
+        		<div class="row">
+        			<div class="col-25">
+        				<label for="proDescription">Description</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="proDescription" name="proDescription">
+        			</div>
+        		</div>
+        		<!-- project domain -->
+        		<div class="row">
+        			<div class="col-25">
+        				<label for="proDomain">Domain</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="proDomain" name="proDomain">
+        			</div>
+        		</div>
+        		<!-- project start date -->
+        		<div class="row">
+        			<div class="col-25">
+        				<label for="startDate">Start Date</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="startDate" name="startDate">
+        			</div>
+        		</div>
+        		<!-- project finish date -->
+        		<div class="row">
+        			<div class="col-25">
+        				<label for="finishDate">Finish Date</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="finishDate" name="finishDate">
+        			</div>
+        		</div>
+        		<!-- customer -->
+        		<div class="row">
+        			<div class="col-25">
+        				<label for="customer">Customer</label>
+        			</div>
+        			<div class="col-75">
+        				<input type="text" id="customer" name="customer">
         			</div>
         		</div>
         		<input type="submit" value="submit"><br>

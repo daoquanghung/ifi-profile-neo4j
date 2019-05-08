@@ -10,7 +10,7 @@
 </head>
 <body>
 	<jsp:include page="_header.jsp"></jsp:include>
-	<h2>Add Person</h2>
+	<h2>Information of ${user.userName }</h2>
 	<table>
 		<tr>
 			<td>Name</td>

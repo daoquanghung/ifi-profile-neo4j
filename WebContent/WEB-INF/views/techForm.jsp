@@ -8,7 +8,7 @@
 </head>
 <body>
 	<jsp:include page="_header.jsp"></jsp:include>
-	<h1>Add Technology</h1>
+	<h1>Information of Technology ${tech.techName }</h1>
 	<table>
 		<tr>
 			<td>Tech Name</td>

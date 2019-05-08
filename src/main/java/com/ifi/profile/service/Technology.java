@@ -13,7 +13,9 @@ import org.neo4j.driver.Session;
 import org.neo4j.driver.StatementResult;
 import org.neo4j.driver.Transaction;
 
+
 import com.ifi.profile.model.Tech;
+
 
 
 public class Technology {
@@ -83,7 +85,7 @@ public class Technology {
 	}
 	
 	
-	
+	// show list technology
 	 public List<Tech> getListTech(String initial)
 	    {
 	    	List<Tech> ret = new ArrayList<Tech>();
@@ -106,6 +108,45 @@ public class Technology {
 	        
 	        return ret;
 	    }
+	 
+	 // search technology
+	 public List<Tech> searchTech(String initial){
+	    	List<Tech> tech = new ArrayList<Tech>();
+	        try (Session session = driver.session()){
+	        	 StatementResult result = session.run(
+	                     "MATCH (a:Technology) WHERE a.technology = {x} RETURN a.technology AS technology, a.description AS description, a.category AS category, a.domain AS domain",
+	                     parameters("x", initial));
+	             // Each Cypher execution returns a stream of records.
+	        	while(result.hasNext()){
+	        		 Record record = result.next();
+	        		 Tech tmpTech = new Tech();
+	        		 
+	    			tmpTech.setTechName(record.get("technology").asString());
+	    			tmpTech.setTechDescription(record.get("description").asString());
+	    			tmpTech.setTechCategory(record.get("category").asString());
+	    			tmpTech.setTechDomain(record.get("domain").asString());
+	    			 
+	    			 tech.add(tmpTech);
+	        		
+	        	 }
+	             
+	        }
+	        
+	        return tech;
+	    }
+	    
+	 
+	 // remove
+	 public Tech removeTech(String techName){
+		 Tech tech = new Tech();
+			try(Session session = driver.session()){
+				try(Transaction tx = session.beginTransaction()){
+					tx.run("MATCH (t:Technology{technology: $technology}) DETACH DELETE p",parameters("technology",techName));
+					tx.success();
+				}
+			}
+			return tech;
+		}
 	
 	public void close(){
 		driver.close();

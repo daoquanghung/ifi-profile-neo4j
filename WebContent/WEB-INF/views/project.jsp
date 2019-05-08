@@ -8,7 +8,7 @@
 </head>
 <body>
 	<jsp:include page="_header.jsp"></jsp:include>
-	<h2>Add Project</h2>
+	<h2>Information of ${task.project }</h2>
 	<table>
 		<tr>
 			<td>Project</td>

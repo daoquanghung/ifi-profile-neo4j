@@ -14,7 +14,7 @@ import org.neo4j.driver.StatementResult;
 import org.neo4j.driver.Transaction;
 
 import com.ifi.profile.model.Task;
-import com.ifi.profile.model.Tech;
+
 
 public class Project {
 	Driver driver;
@@ -140,33 +140,55 @@ public class Project {
 		return task;
 	}
 	
-	public void printProject(){
-		try(Session session = driver.session()){
-			StatementResult result = session.run("MATCH (p:Project) RETURN p.project AS project");
-			while(result.hasNext()){
-				Record record = result.next();
-				System.out.println(record.get("project").asString());
-			}
-		}
-	}
+	// Search project
+	 public List<Task> searchProject(String initial){
+	    	List<Task> task = new ArrayList<Task>();
+	        try (Session session = driver.session()){
+	        	 StatementResult result = session.run(
+	                     "MATCH (a:Project) WHERE a.chargeId = {x} RETURN a.project AS project, a.chargeId AS chargeId, a.status AS status, a.description AS description, a.domain AS domain, a.startDate AS startDate, a.finishDate AS finishDate, a.customer AS customer",
+	                     parameters("x", initial));
+	             // Each Cypher execution returns a stream of records.
+	        	while(result.hasNext()){
+	        		 Record record = result.next();
+	        		 Task tmpTask = new Task();
+	        		 
+	    			 tmpTask.setProject(record.get("project").asString());
+	    			 tmpTask.setChargeId(record.get("chargeId").asString());
+	    			 tmpTask.setProStatus(record.get("status").asString());
+	    			 tmpTask.setProDescription(record.get("description").asString());
+	    			 tmpTask.setProDomain(record.get("domain").asString());
+	    			 tmpTask.setStartDate(record.get("startDate").asString());
+	    			 tmpTask.setFinishDate(record.get("finishDate").asString());
+	    			 tmpTask.setCustomer(record.get("customer").asString());
+	        		 
+	    			 task.add(tmpTask);
+	        		
+	        	 }
+	             
+	        }
+	        
+	        return task;
+	    }
+	    
 	
-	public List<Tech> getListTech(String initial)
+	// Show list project
+	public List<Task> getListTech(String initial)
     {
-    	List<Tech> ret = new ArrayList<Tech>();
+    	List<Task> ret = new ArrayList<Task>();
         try (Session session = driver.session())
         {
             // Auto-commit transactions are a quick and easy way to wrap a read.
             StatementResult result = session.run(
-                    "MATCH (t:Technology) WHERE t.name STARTS WITH {x} RETURN t.name AS name",
+                    "MATCH (p:Project) WHERE p.project STARTS WITH {x} RETURN p.project AS project",
                     parameters("x", initial));
             // Each Cypher execution returns a stream of records.
             while (result.hasNext())
             {
-            	Tech tmpTech = new Tech();
+            	Task tmpTask = new Task();
                 Record record = result.next();
                 // Values can be extracted from a record by index or name.
-                tmpTech.setTechName(record.get("name").asString());
-                ret.add(tmpTech);
+                tmpTask.setProject(record.get("project").asString());
+                ret.add(tmpTask);
             }
         }
         
@@ -174,13 +196,15 @@ public class Project {
     }
 	
 	// remove a project
-	public void removeProject(String project){
+	public Task removeProject(String project){
+		Task task = new Task();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
 				tx.run("MATCH (p:Project{project: $project}) DETACH DELETE p",parameters("project",project));
 				tx.success();
 			}
 		}
+		return task;
 	}
 	
 	public void close(){

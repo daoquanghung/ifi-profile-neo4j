@@ -1,7 +1,7 @@
 package com.ifi.profile.controller;
 
 import java.text.DateFormat;
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -59,9 +59,11 @@ public class HomeController {
         ModelAndView modelRet = new ModelAndView("user");
         modelRet.addObject("lists", listPeople);
         modelRet.addObject("userName", user.getUserName());
+        
 		return modelRet;
 	}
 	
+
 	// Person
 	@RequestMapping(value = {"/form"}, method = RequestMethod.GET)
 	public String form(@Validated User user, Model model){
@@ -77,7 +79,7 @@ public class HomeController {
 		User addJoin = person.addPersonJoin(user.getUserName(), user.getJoin());
 		User addStatus = person.addPersonStatus(user.getUserName(), user.getStatus());
 		
-		User remove = person.removePerson(user.getUserName());
+
 		
 		person.close();
 		
@@ -87,13 +89,49 @@ public class HomeController {
 		model.addAttribute("addBirth", addBirth);
 		model.addAttribute("addJoin", addJoin);
 		model.addAttribute("addStatus", addStatus);
+
 		
-		model.addAttribute("remove", remove);
 		return "form";
 	}
 	
+	// Remove person
 	
-	// Technology
+	@RequestMapping(value = {"/remove"}, method = RequestMethod.GET)
+	public String remove(@Validated User user, Model model){
+		Person person = new Person("bolt://localhost:7687", "neo4j", "11111111");
+		User remove = person.removePerson(user.getUserId());
+		
+		person.close();
+		
+		model.addAttribute("remove", remove);
+		return "remove";
+	}
+	
+	// Search person
+	@RequestMapping(value = {"/searchPerson"}, method = RequestMethod.GET)
+	public String searchPerson(@Validated User user, Model model){
+		Person person = new Person("bolt://localhost:7687", "neo4j", "11111111");
+		
+		List<User> listUser = person.searchPeople(user.getUserName());
+		
+		person.close();
+		
+		model.addAttribute("lists", listUser);
+		model.addAttribute("userName", user.getUserName());
+		
+		for(User us : listUser){
+			System.out.println("" +us.getUserName());
+			System.out.println("" + us.getUserId());
+			System.out.println("" +us.getTitle());
+			System.out.println("" +us.getBirthday());
+			System.out.println("" +us.getJoin());
+			System.out.println("" +us.getStatus());
+		}
+			
+		return "searchPerson";
+	}
+	
+	// Add Technology
 	@RequestMapping(value = "/techForm", method = RequestMethod.GET)
 	public String techForm(@Validated Tech tech ,Model model){
 		Technology technology = new Technology("bolt://localhost:7687", "neo4j", "11111111");
@@ -116,7 +154,38 @@ public class HomeController {
 		return "techForm";
 	}
 	
-	// Project
+	// Remove technology
+	
+		@RequestMapping(value = {"/removeTech"}, method = RequestMethod.GET)
+		public String removeTech(@Validated Tech tech, Model model){
+			Technology technology = new Technology("bolt://localhost:7687", "neo4j", "11111111");
+			Tech remove = technology.removeTech(tech.getTechName());
+			
+			technology.close();
+			
+			model.addAttribute("remove", remove);
+			return "removeTech";
+		}
+		
+	// Search technology
+		
+		@RequestMapping(value = {"/searchTech"}, method = RequestMethod.GET)
+		public String searchTech(@Validated Tech tech, Model model){
+			Technology technology = new Technology("bolt://localhost:7687", "neo4j", "11111111");
+			
+			List<Tech> listTech = technology.searchTech(tech.getTechName());
+			
+			technology.close();
+			
+			model.addAttribute("lists", listTech);
+			model.addAttribute("techName", tech.getTechName());
+			
+			return "searchTech";
+		}
+		
+	
+	
+	// Add Project
 	@RequestMapping(value = "/project", method = RequestMethod.GET)
 	public String project(@Validated Task task, Model model) {
 		Project pro = new Project("bolt://localhost:7687", "neo4j", "11111111");
@@ -152,7 +221,38 @@ public class HomeController {
 		return "project";
 	}
 	
-	// Relation
+	// Remove project
+	
+		@RequestMapping(value = {"/removeProject"}, method = RequestMethod.GET)
+		public String removeProject(@Validated Task task, Model model){
+			Project pro = new Project("bolt://localhost:7687", "neo4j", "11111111");
+			Task remove = pro.removeProject(task.getProject());
+			
+			pro.close();
+			
+			model.addAttribute("remove", remove);
+			return "removeProject";
+		}
+	
+	// Search project
+		
+		@RequestMapping(value = {"/searchProject"}, method = RequestMethod.GET)
+		public String searchProject(@Validated Task task, Model model){
+			Project pro = new Project("bolt://localhost:7687", "neo4j", "11111111");
+			
+			List<Task> listTask = pro.searchProject(task.getChargeId());
+			
+			pro.close();
+			
+			model.addAttribute("lists", listTask);
+			model.addAttribute("projectName", task.getProject());
+				
+			return "searchProject";
+		}
+		
+
+	
+	// Add Relation
 	@RequestMapping(value = "/relation", method = RequestMethod.GET)
 	public String relation(@Validated Rela rela, Model model){
 		Relationship relate = new Relationship("bolt://localhost:7687", "neo4j", "11111111");
@@ -177,7 +277,7 @@ public class HomeController {
 		return "relation";
 	}
 	
-	// Department
+	// Add Department
 	@RequestMapping(value = "/department", method = RequestMethod.GET)
 	public String department(@Validated Office off, Model model){
 		Department dep = new Department("bolt://localhost:7687", "neo4j", "11111111");
@@ -191,6 +291,33 @@ public class HomeController {
 		model.addAttribute("addDescription", addDescription);
 		
 		return "department";
+	}
+	
+	// Remove department
+	@RequestMapping(value = {"/removeDepartment"}, method = RequestMethod.GET)
+	public String removeDepartment(@Validated Office off, Model model){
+		Department dep = new Department("bolt://localhost:7687", "neo4j", "11111111");
+		Office remove = dep.removeDepartment(off.getDepartment());
+		
+		dep.close();
+		
+		model.addAttribute("remove", remove);
+		return "removeDepartment";
+	}
+	
+	// Search department
+	@RequestMapping(value = {"/searchDep"}, method = RequestMethod.GET)
+	public String searchDep(@Validated Office off, Model model){
+		Department dep = new Department("bolt://localhost:7687", "neo4j", "11111111");
+		
+		List<Office> listOff = dep.searchDepartment(off.getDepartment());
+		
+		dep.close();
+		
+		model.addAttribute("lists", listOff);
+		model.addAttribute("department", off.getDepartment());
+			
+		return "searchDep";
 	}
 	
 }

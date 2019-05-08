@@ -4,20 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Department</title>
+<title>Remove</title>
 </head>
 <body>
-	<jsp:include page="_header.jsp"></jsp:include>
-	<h1>Information of department ${office.department }</h1>
-	<table>
-		<tr>
-			<td>Department</td>
-			<td>${office.department}</td>
-		</tr>
-		<tr>
-			<td>Description</td>
-			<td>${office.description}</td>
-		</tr>
-	</table>
+	<h2>Department has name: ${office.department } has been removed</h2>
 </body>
 </html>

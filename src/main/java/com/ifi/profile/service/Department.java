@@ -2,7 +2,8 @@ package com.ifi.profile.service;
 
 import static org.neo4j.driver.Values.parameters;
 
-
+import java.util.ArrayList;
+import java.util.List;
 
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
@@ -13,6 +14,8 @@ import org.neo4j.driver.StatementResult;
 import org.neo4j.driver.Transaction;
 
 import com.ifi.profile.model.Office;
+import com.ifi.profile.model.User;
+
 
 public class Department {
 	Driver driver;
@@ -51,16 +54,42 @@ public class Department {
 		return office;
 	}
 	
-	public void printDepartment(String department){
-		try(Session session = driver.session()){
-			StatementResult result = session.run("MATCH (d:Department) RETURN d.department AS department");
-			while(result.hasNext()){
-				Record record = result.next();
-				System.out.println(record.get("department").asString());
-			}
-		}
-	}
+	 // remove department 
+ 	public Office removeDepartment(String department){
+ 		Office office = new Office();
+ 		try(Session session = driver.session()){
+ 			try(Transaction tx = session.beginTransaction()){
+ 				tx.run("MATCH (d:Department{department: $department}) DETACH DELETE p",parameters("department",department));
+ 				tx.success();
+ 			}
+ 		}
+ 		return office;
+ 	}
 	
+ // search person
+    public List<Office> searchDepartment(String initial){
+    	List<Office> office = new ArrayList<Office>();
+        try (Session session = driver.session()){
+        	 StatementResult result = session.run(
+                     "MATCH (a:Department) WHERE a.Department STARTS WITH {x} RETURN a.department AS department, a.description AS description",
+                     parameters("x", initial));
+             // Each Cypher execution returns a stream of records.
+        	while(result.hasNext()){
+        		 Record record = result.next();
+        		 Office tmpOff = new Office();
+        		 
+        		 tmpOff.setDepartment(record.get("department").asString());
+        		 tmpOff.setDescription(record.get("description").asString());
+    			
+    			 office.add(tmpOff);
+        		
+        	 }
+             
+        }
+        
+        return office;
+    }
+    
 	public void close(){
 		driver.close();
 	}

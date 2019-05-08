@@ -125,36 +125,20 @@ public class Person {
     	return user;
 	}
 
-    public void printPeople(String initial){
-        try (Session session = driver.session())
-        {
-            // Auto-commit transactions are a quick and easy way to wrap a read.
-            StatementResult result = session.run(
-                    "MATCH (a:Person) WHERE a.name STARTS WITH {x} RETURN a.name AS name",
-                    parameters("x", initial));
-            // Each Cypher execution returns a stream of records.
-            while (result.hasNext())
-            {
-                Record record = result.next();
-                // Values can be extracted from a record by index or name.
-                System.out.println(record.get("name").asString());
-            }
-        }
-    }
-    
+   
  // remove person 
- 	public User removePerson(String name){
+ 	public User removePerson(String id){
  		User user = new User();
  		try(Session session = driver.session()){
  			try(Transaction tx = session.beginTransaction()){
- 				tx.run("MATCH (p:Project{name: $name}) DETACH DELETE p",parameters("name",name));
+ 				tx.run("MATCH (p:Person{id: $id}) DETACH DELETE p",parameters("id",id));
  				tx.success();
  			}
  		}
  		return user;
  	}
       	
- 		
+ 	// show list person
  	
     public List<User> getListPeople(String initial)
     {
@@ -177,6 +161,34 @@ public class Person {
         }
         
         return ret;
+    }
+    
+    // search person
+    public List<User> searchPeople(String initial){
+    	List<User> user = new ArrayList<User>();
+        try (Session session = driver.session()){
+        	 StatementResult result = session.run(
+                     "MATCH (a:Person) WHERE a.name STARTS WITH {x} RETURN a.name AS name, a.id AS id, a.title AS title, a.birthday AS birthday, a.join AS join, a.status AS status",
+                     parameters("x", initial));
+             // Each Cypher execution returns a stream of records.
+        	while(result.hasNext()){
+        		 Record record = result.next();
+        		 User tmpUser = new User();
+        		 
+    			 tmpUser.setUserName(record.get("name").asString());
+    			 tmpUser.setUserId(record.get("id").asString());
+    			 tmpUser.setTitle(record.get("title").asString());
+    			 tmpUser.setBirthday(record.get("birthday").asString());
+    			 tmpUser.setJoin(record.get("join").asString());
+    			 tmpUser.setStatus(record.get("status").asString());
+    			 
+    			 user.add(tmpUser);
+        		
+        	 }
+             
+        }
+        
+        return user;
     }
     
     
