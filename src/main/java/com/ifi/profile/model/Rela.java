@@ -5,6 +5,14 @@ public class Rela {
 	private String department;
 	private String techName;
 	private String project;
+	private String relation;
+	
+	public String getRelation() {
+		return relation;
+	}
+	public void setRelation(String relation) {
+		this.relation = relation;
+	}
 	public String getUserName() {
 		return userName;
 	}

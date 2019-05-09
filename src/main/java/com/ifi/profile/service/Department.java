@@ -14,7 +14,7 @@ import org.neo4j.driver.StatementResult;
 import org.neo4j.driver.Transaction;
 
 import com.ifi.profile.model.Office;
-import com.ifi.profile.model.User;
+
 
 
 public class Department {

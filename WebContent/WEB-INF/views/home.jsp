@@ -245,7 +245,7 @@ input[type = submit]:hover{
     		 
         	<h2>Add Person</h2>
         		<div class="container">
-        			<form name="myForm" action="form" onsubmit="return validate()" method="get">
+        			<form name="myForm" action="form" onsubmit="return validate()" method="post">
         			<!-- Person name -->
         			<div class="row">
         				<div class="col-25">
@@ -725,7 +725,20 @@ input[type = submit]:hover{
 			Person Name	<input type="text" name="userName">
 			Technology	<input type="text" name="techName">
 			<input type="submit" value="submit"><br>
+		</form><br>
+		
+		<!-- Search person by relationship -->
+		<p>Search person by relationship</p>
+		<form action="searchPersonByRela" method="get">
+			<select>
+				<option value="relation">BELONG_TO</option>
+				<option value="relation">WORK_IN</option>
+				<option value="relation">HAS_EXPERIENCE</option>
+			</select>
+			<input type="submit" value="Submit">
 		</form>
+		
+		
 	</div>
 	
 	<script>

@@ -65,7 +65,7 @@ public class HomeController {
 	
 
 	// Person
-	@RequestMapping(value = {"/form"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/form"}, method = RequestMethod.POST)
 	public String form(@Validated User user, Model model){
 		
 		Person person = new Person("bolt://localhost:7687", "neo4j", "11111111");
@@ -320,4 +320,25 @@ public class HomeController {
 		return "searchDep";
 	}
 	
+	// Search person by relationship
+	@RequestMapping(value = {"/searchPersonByRela"}, method = RequestMethod.GET)
+	public String searchPersonByRela(@Validated Rela rela, Model model){
+		Relationship relat = new Relationship("bolt://localhost:7687", "neo4j", "11111111");
+		// search by department
+		List<User> listPerson = relat.searchByRela(rela.getRelation());
+		// search by project
+		List<User> listPersonByProject = relat.searchByProject(rela.getRelation());
+		// search by technology
+		List<User> listPersonByTech = relat.searchByTech(rela.getRelation());
+		
+		relat.close();
+		
+		model.addAttribute("lists", listPerson);
+		model.addAttribute("listByPro", listPersonByProject);
+		model.addAttribute("listByTech", listPersonByTech);
+		
+		model.addAttribute("relation", rela.getRelation());
+
+		return "searchPersonByRela";
+	}
 }

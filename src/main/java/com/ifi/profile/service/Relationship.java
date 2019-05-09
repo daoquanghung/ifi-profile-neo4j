@@ -2,6 +2,9 @@ package com.ifi.profile.service;
 
 import static org.neo4j.driver.Values.parameters;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*import java.util.ArrayList;
 import java.util.List;*/
 
@@ -14,6 +17,7 @@ import org.neo4j.driver.StatementResult;
 import org.neo4j.driver.Transaction;
 
 import com.ifi.profile.model.Rela;
+import com.ifi.profile.model.User;
 
 public class Relationship {
 	Driver driver;
@@ -165,6 +169,90 @@ public class Relationship {
 		}	
 		return rela;
 	}
+	
+	
+	// search person by relation with department
+	public List<User> searchByRela(String rela){
+		List<User> user = new ArrayList<User>();
+		try(Session session = driver.session()){
+			StatementResult result = session.run(
+					"MATCH (a:Person)-[r:BELONG_TO]->(d:Department)" +
+					"RETURN a.name AS name, a.id AS id, a.title AS title, a.birthday AS birthday, a.join AS join, a.status AS status ",
+					parameters("rela", rela)
+					);
+			while(result.hasNext()){
+       		 Record record = result.next();
+       		 User tmpUser = new User();
+       		 
+   			 tmpUser.setUserName(record.get("name").asString());
+   			 tmpUser.setUserId(record.get("id").asString());
+   			 tmpUser.setTitle(record.get("title").asString());
+   			 tmpUser.setBirthday(record.get("birthday").asString());
+   			 tmpUser.setJoin(record.get("join").asString());
+   			 tmpUser.setStatus(record.get("status").asString());
+   			 
+   			 user.add(tmpUser);
+			}
+		}
+		
+		return user;
+	}
+	
+	// search person by relation with project
+		public List<User> searchByProject(String rela){
+			List<User> user = new ArrayList<User>();
+			try(Session session = driver.session()){
+				StatementResult result = session.run(
+						"MATCH (a:Person)-[r:WORK_IN]->(p:Project) " +	
+						"RETURN a.name AS name, a.id AS id, a.title AS title, a.birthday AS birthday, a.join AS join, a.status AS status ",
+						parameters("rela", rela)
+						);
+				while(result.hasNext()){
+	       		 Record record = result.next();
+	       		 User tmpUser = new User();
+	       		 
+	   			 tmpUser.setUserName(record.get("name").asString());
+	   			 tmpUser.setUserId(record.get("id").asString());
+	   			 tmpUser.setTitle(record.get("title").asString());
+	   			 tmpUser.setBirthday(record.get("birthday").asString());
+	   			 tmpUser.setJoin(record.get("join").asString());
+	   			 tmpUser.setStatus(record.get("status").asString());
+	   			 
+	   			 user.add(tmpUser);
+				}
+			}
+			
+			return user;
+		}
+		
+		// search person by relation with technology
+		public List<User> searchByTech(String rela){
+			List<User> user = new ArrayList<User>();
+			try(Session session = driver.session()){
+				StatementResult result = session.run(	
+						"MATCH (a:Person)-[r:HAS_EXPERIENCE]->(t:Technology) " +
+						"RETURN a.name AS name, a.id AS id, a.title AS title, a.birthday AS birthday, a.join AS join, a.status AS status ",
+						parameters("rela", rela)
+						);
+				while(result.hasNext()){
+	       		 Record record = result.next();
+	       		 User tmpUser = new User();
+	       		 
+	   			 tmpUser.setUserName(record.get("name").asString());
+	   			 tmpUser.setUserId(record.get("id").asString());
+	   			 tmpUser.setTitle(record.get("title").asString());
+	   			 tmpUser.setBirthday(record.get("birthday").asString());
+	   			 tmpUser.setJoin(record.get("join").asString());
+	   			 tmpUser.setStatus(record.get("status").asString());
+	   			 
+	   			 user.add(tmpUser);
+				}
+			}
+			
+			return user;
+		}
+	
+	// search 
 	
 	public void close(){
 		driver.close();
