@@ -7,6 +7,6 @@
 <title>Remove</title>
 </head>
 <body>
-	<h2>Department has name: ${office.department } has been removed</h2>
+	<h2>Department has name: ${office.name } has been removed</h2>
 </body>
 </html>

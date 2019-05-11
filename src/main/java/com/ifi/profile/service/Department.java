@@ -29,25 +29,25 @@ public class Department {
 	}
 	
 	// create department
-	public Office department(String department){
+	public Office department(String name){
 		Office office = new Office();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
-				tx.run("MERGE (d:Department{department:$department})",
-						parameters("department",department));
+				tx.run("CREATE (d:Department{name:$name})",
+						parameters("name",name));
 				tx.success();
 			}
 		}
 		return office;
 	}
 	
-	public Office description(String department, String description){
+	public Office description(String name, String description){
 		Office office = new Office();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
-				tx.run("MATCH (d:Department{department:$department})" +
+				tx.run("MATCH (d:Department{name:$name})" +
 						"SET d.description = $description",
-						parameters("department",department, "description",description));
+						parameters("name",name, "description",description));
 				tx.success();
 			}
 		}
@@ -55,30 +55,30 @@ public class Department {
 	}
 	
 	 // remove department 
- 	public Office removeDepartment(String department){
+ 	public Office removeDepartment(String name){
  		Office office = new Office();
  		try(Session session = driver.session()){
  			try(Transaction tx = session.beginTransaction()){
- 				tx.run("MATCH (d:Department{department: $department}) DETACH DELETE p",parameters("department",department));
+ 				tx.run("MATCH (d:Department{name: $name}) DETACH DELETE d",parameters("name",name));
  				tx.success();
  			}
  		}
  		return office;
  	}
 	
- // search person
+ // search department
     public List<Office> searchDepartment(String initial){
     	List<Office> office = new ArrayList<Office>();
         try (Session session = driver.session()){
         	 StatementResult result = session.run(
-                     "MATCH (a:Department) WHERE a.Department STARTS WITH {x} RETURN a.department AS department, a.description AS description",
+                     "MATCH (d:Department) WHERE d.name STARTS WITH {x} RETURN d.name AS name, d.description AS description",
                      parameters("x", initial));
              // Each Cypher execution returns a stream of records.
         	while(result.hasNext()){
         		 Record record = result.next();
         		 Office tmpOff = new Office();
         		 
-        		 tmpOff.setDepartment(record.get("department").asString());
+        		 tmpOff.setName(record.get("name").asString());
         		 tmpOff.setDescription(record.get("description").asString());
     			
     			 office.add(tmpOff);

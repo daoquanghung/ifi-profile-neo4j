@@ -194,7 +194,7 @@ public class HomeController {
 		// Add project name
 		Task addProName = pro.addProject(task.getProject());
 		// Add project id
-		Task addProId = pro.addProjectId(task.getProject(), task.getChargeId());
+		Task addProId = pro.addProjectId(task.getProject(), task.getChargeid());
 		// Add project status
 		Task addProStatus = pro.addProjectStatus(task.getProject(), task.getProStatus());
 		// Add project description
@@ -202,9 +202,9 @@ public class HomeController {
 		// Add project domain
 		Task addProDomain = pro.addProjectDomain(task.getProject(), task.getProDomain());
 		// Add project start date
-		Task addProStart = pro.addProjectStart(task.getProject(), task.getStartDate());
+		Task addProStart = pro.addProjectStart(task.getProject(), task.getStartdate());
 		// Add project finish date
-		Task addProFinish = pro.addProjectFinish(task.getProject(), task.getFinishDate());
+		Task addProFinish = pro.addProjectFinish(task.getProject(), task.getFinishdate());
 		// Add project customer
 		Task addCustomer = pro.addProjectCustomer(task.getProject(), task.getCustomer());
 		
@@ -240,7 +240,7 @@ public class HomeController {
 		public String searchProject(@Validated Task task, Model model){
 			Project pro = new Project("bolt://localhost:7687", "neo4j", "11111111");
 			
-			List<Task> listTask = pro.searchProject(task.getChargeId());
+			List<Task> listTask = pro.searchProject(task.getChargeid());
 			
 			pro.close();
 			
@@ -258,13 +258,13 @@ public class HomeController {
 		Relationship relate = new Relationship("bolt://localhost:7687", "neo4j", "11111111");
 		
 		// relation between person and department
-		Rela relaPerDe = relate.relaPersonDepart(rela.getUserName(), rela.getDepartment());
+		Rela relaPerDe = relate.relaPersonDepart(rela.getUserId(), rela.getDepartment());
 		// relation between project and technology
 		Rela relaProTech = relate.relaProTech(rela.getTechName(), rela.getProject());
 		//relation between person and technology
-		Rela relaPerTech = relate.relaPerTech(rela.getUserName(), rela.getTechName());
+		Rela relaPerTech = relate.relaPerTech(rela.getUserId(), rela.getTechName());
 		// relation between person and project (work in)
-		Rela relaPerPro = relate.relaPerPro(rela.getUserName(), rela.getProject());
+		Rela relaPerPro = relate.relaPerPro(rela.getUserId(), rela.getProject());
 		
 		relate.close();
 		
@@ -282,8 +282,8 @@ public class HomeController {
 	public String department(@Validated Office off, Model model){
 		Department dep = new Department("bolt://localhost:7687", "neo4j", "11111111");
 		
-		Office addDepartment = dep.department(off.getDepartment());
-		Office addDescription = dep.description(off.getDepartment(), off.getDescription());
+		Office addDepartment = dep.department(off.getName());
+		Office addDescription = dep.description(off.getName(), off.getDescription());
 		
 		dep.close();
 		
@@ -297,7 +297,7 @@ public class HomeController {
 	@RequestMapping(value = {"/removeDepartment"}, method = RequestMethod.GET)
 	public String removeDepartment(@Validated Office off, Model model){
 		Department dep = new Department("bolt://localhost:7687", "neo4j", "11111111");
-		Office remove = dep.removeDepartment(off.getDepartment());
+		Office remove = dep.removeDepartment(off.getName());
 		
 		dep.close();
 		
@@ -310,12 +310,12 @@ public class HomeController {
 	public String searchDep(@Validated Office off, Model model){
 		Department dep = new Department("bolt://localhost:7687", "neo4j", "11111111");
 		
-		List<Office> listOff = dep.searchDepartment(off.getDepartment());
+		List<Office> listOff = dep.searchDepartment(off.getName());
 		
 		dep.close();
 		
 		model.addAttribute("lists", listOff);
-		model.addAttribute("department", off.getDepartment());
+		model.addAttribute("name", off.getName());
 			
 		return "searchDep";
 	}

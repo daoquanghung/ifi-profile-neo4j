@@ -16,7 +16,7 @@
 		</tr>
 		<tr>
 			<td>Project Id</td>
-			<td>${task.chargeId}</td>
+			<td>${task.chargeid}</td>
 		</tr>
 		<tr>
 			<td>Status</td>
@@ -36,11 +36,11 @@
 		</tr>
 		<tr>
 			<td>Start date</td>
-			<td>${task.startDate}</td>
+			<td>${task.startdate}</td>
 		</tr>
 		<tr>
 			<td>Finish date</td>
-			<td>${task.finishDate}</td>
+			<td>${task.finishdate}</td>
 		</tr>
 	</table>
 	

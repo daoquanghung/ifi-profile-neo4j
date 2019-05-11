@@ -1,14 +1,15 @@
 package com.ifi.profile.model;
 
 public class Office {
-	private String department;
+	private String name;
 	private String description;
 	
-	public String getDepartment() {
-		return department;
+	
+	public String getName() {
+		return name;
 	}
-	public void setDepartment(String department) {
-		this.department = department;
+	public void setName(String name) {
+		this.name = name;
 	}
 	public String getDescription() {
 		return description;

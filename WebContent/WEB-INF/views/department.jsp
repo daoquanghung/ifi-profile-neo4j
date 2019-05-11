@@ -7,12 +7,12 @@
 <title>Department</title>
 </head>
 <body>
-	<jsp:include page="_header.jsp"></jsp:include>
-	<h1>Information of department ${office.department }</h1>
+<jsp:include page="_header.jsp"></jsp:include>
+	<h1>Information of department ${office.name }</h1>
 	<table>
 		<tr>
 			<td>Department</td>
-			<td>${office.department}</td>
+			<td>${office.name}</td>
 		</tr>
 		<tr>
 			<td>Description</td>

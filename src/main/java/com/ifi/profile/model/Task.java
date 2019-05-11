@@ -2,13 +2,13 @@ package com.ifi.profile.model;
 
 public class Task {
 	private String project;
-	private String chargeId;
+	private String chargeid;
 	private String proStatus;
 	private String proDescription;
 	private String proDomain;
 	private String customer;
-	private String startDate;
-	private String finishDate;
+	private String startdate;
+	private String finishdate;
 	
 	public String getProject() {
 		return project;
@@ -17,12 +17,7 @@ public class Task {
 		this.project = project;
 	}
 	
-	public String getChargeId() {
-		return chargeId;
-	}
-	public void setChargeId(String chargeId) {
-		this.chargeId = chargeId;
-	}
+	
 	
 	public String getProStatus() {
 		return proStatus;
@@ -55,19 +50,25 @@ public class Task {
 	public void setCustomer(String customer) {
 		this.customer = customer;
 	}
+	public String getChargeid() {
+		return chargeid;
+	}
+	public void setChargeid(String chargeid) {
+		this.chargeid = chargeid;
+	}
+	public String getStartdate() {
+		return startdate;
+	}
+	public void setStartdate(String startdate) {
+		this.startdate = startdate;
+	}
+	public String getFinishdate() {
+		return finishdate;
+	}
+	public void setFinishdate(String finishdate) {
+		this.finishdate = finishdate;
+	}
 	
-	public String getStartDate() {
-		return startDate;
-	}
-	public void setStartDate(String startDate) {
-		this.startDate = startDate;
-	}
 	
-	public String getFinishDate() {
-		return finishDate;
-	}
-	public void setFinishDate(String finishDate) {
-		this.finishDate = finishDate;
-	}
 	
 }

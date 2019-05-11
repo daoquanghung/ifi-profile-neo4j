@@ -5,8 +5,8 @@ public class User {
 	private String userName;
 	private String userId;
 	private String title;
-	private String birthday;
-	private String join;
+	private int birthday;
+	private int join;
 	private String status;
 	
 
@@ -34,21 +34,19 @@ public class User {
 		this.title = title;
 	}
 
-	
-
-	public String getBirthday() {
+	public int getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(String birthday) {
+	public void setBirthday(int birthday) {
 		this.birthday = birthday;
 	}
 
-	public String getJoin() {
+	public int getJoin() {
 		return join;
 	}
 
-	public void setJoin(String join) {
+	public void setJoin(int join) {
 		this.join = join;
 	}
 

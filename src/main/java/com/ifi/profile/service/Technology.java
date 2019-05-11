@@ -35,8 +35,8 @@ public class Technology {
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
 				tx.run(//"CREATE CONSTRAINT ON (t:Technology) ASSERT t.name IS UNIQUE" +
-						"MERGE(t:Technology{technology:$technology})",
-						parameters("technology",techName));
+						"MERGE(t:Technology{name:$name})",
+						parameters("name",techName));
 				tx.success();
 			}
 		}
@@ -48,9 +48,9 @@ public class Technology {
 		Tech tech = new Tech();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
-				tx.run("MATCH (t:Technology{technology:$technology})"+
+				tx.run("MATCH (t:Technology{name:$name})"+
 						"SET t.description = $description",
-						parameters("technology",techName ,"description", description));
+						parameters("name",techName ,"description", description));
 				tx.success();
 			}
 		}
@@ -62,9 +62,9 @@ public class Technology {
 		Tech tech = new Tech();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
-				tx.run("MATCH (t:Technology{technology:$technology})"+
+				tx.run("MATCH (t:Technology{name:$name})"+
 						"SET t.category = $category",
-						parameters("technology",techName ,"category", category));
+						parameters("name",techName ,"category", category));
 				tx.success();
 			}
 		}
@@ -75,9 +75,9 @@ public class Technology {
 		Tech tech = new Tech();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
-				tx.run("MATCH (t:Technology{technology:$technology})"+
+				tx.run("MATCH (t:Technology{name:$name})"+
 						"SET t.domain= $domain",
-						parameters("technology",techName ,"domain", domain));
+						parameters("name",techName ,"domain", domain));
 				tx.success();
 			}
 		}
@@ -114,14 +114,14 @@ public class Technology {
 	    	List<Tech> tech = new ArrayList<Tech>();
 	        try (Session session = driver.session()){
 	        	 StatementResult result = session.run(
-	                     "MATCH (a:Technology) WHERE a.technology = {x} RETURN a.technology AS technology, a.description AS description, a.category AS category, a.domain AS domain",
+	                     "MATCH (a:Technology) WHERE a.name = {x} RETURN a.name AS name, a.description AS description, a.category AS category, a.domain AS domain",
 	                     parameters("x", initial));
 	             // Each Cypher execution returns a stream of records.
 	        	while(result.hasNext()){
 	        		 Record record = result.next();
 	        		 Tech tmpTech = new Tech();
 	        		 
-	    			tmpTech.setTechName(record.get("technology").asString());
+	    			tmpTech.setTechName(record.get("name").asString());
 	    			tmpTech.setTechDescription(record.get("description").asString());
 	    			tmpTech.setTechCategory(record.get("category").asString());
 	    			tmpTech.setTechDomain(record.get("domain").asString());
@@ -141,7 +141,7 @@ public class Technology {
 		 Tech tech = new Tech();
 			try(Session session = driver.session()){
 				try(Transaction tx = session.beginTransaction()){
-					tx.run("MATCH (t:Technology{technology: $technology}) DETACH DELETE p",parameters("technology",techName));
+					tx.run("MATCH (t:Technology{name: $name}) DETACH DELETE t",parameters("name",techName));
 					tx.success();
 				}
 			}

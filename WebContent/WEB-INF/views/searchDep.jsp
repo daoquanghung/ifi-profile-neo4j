@@ -18,7 +18,7 @@
 	</div>
 	
 	<div class="tabcontent" id="Staff">
-	<h3>Information of ${department} </h3>
+	<h3>Information of ${name} </h3>
 	
 		<table border="1px" width="100%" cellspacing="1px">
 		
@@ -31,7 +31,7 @@
 		
 			<c:forEach var="listValue" items="${lists}">
 			<tr>
-				<td><c:out value="${listValue.department}"></c:out></td>
+				<td><c:out value="${listValue.name}"></c:out></td>
 				<td><c:out value="${listValue.description}"></c:out></td>
 				
 			</tr>

@@ -86,26 +86,27 @@ public class Person {
 	}
     
     // add person birthday
-    public User addPersonBirthday(String name, String birthday){
+    public User addPersonBirthday(String name, int birthday){
+    	
 		User user = new User();
     	try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
 				tx.run("MATCH (p:Person{name: $name}) " +
 						"SET p.birthday= $birthday",
-						parameters("name", name, "birthday",birthday));
+						parameters("name", name, "birthday",Integer.toString(birthday)));
 				tx.success();
 			}
 		}
     	return user;
 	}
     
-    public User addPersonJoin(String name, String join){
+    public User addPersonJoin(String name, int join){
 		User user = new User();
     	try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
 				tx.run("MATCH (p:Person{name: $name}) " +
 						"SET p.join= $join",
-						parameters("name", name, "join",join));
+						parameters("name", name, "join",Integer.toString(join)));
 				tx.success();
 			}
 		}
@@ -178,8 +179,8 @@ public class Person {
     			 tmpUser.setUserName(record.get("name").asString());
     			 tmpUser.setUserId(record.get("id").asString());
     			 tmpUser.setTitle(record.get("title").asString());
-    			 tmpUser.setBirthday(record.get("birthday").asString());
-    			 tmpUser.setJoin(record.get("join").asString());
+    			 tmpUser.setBirthday(record.get("birthday").asInt());
+	   			 tmpUser.setJoin(record.get("join").asInt());
     			 tmpUser.setStatus(record.get("status").asString());
     			 
     			 user.add(tmpUser);

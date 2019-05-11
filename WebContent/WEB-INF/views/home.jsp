@@ -161,10 +161,10 @@ input[type = submit]:hover{
 		<form action="department" method="get">
 			<div class="row">
         		<div class="col-25">
-        			<label for="department">Department</label>
+        			<label for="name">Department</label>
         		</div>
         		<div class="col-75">
-        			<input type="text" id="department" name="department" placeholder="Enter department...">
+        			<input type="text" id="name" name="name" placeholder="Enter department...">
         		</div>
         	</div>
         	
@@ -186,7 +186,7 @@ input[type = submit]:hover{
 		<div>
 			<h2>Remove department</h2>
 			<form action="removeDepartment" method="get">
-				Department name:	<input type="text" name="department">
+				Department name:	<input type="text" name="name">
 				<input type="submit" value="Remove"><br>
 			</form>
 		</div>
@@ -195,7 +195,7 @@ input[type = submit]:hover{
 		<div>
 			<h2>Search department</h2>
 			<form action="searchDep" method="get">
-				Department name: <input type="text" name="department">
+				Department name: <input type="text" name="name">
 				<input type="submit" value="Search">
 			</form>
 		</div>
@@ -209,7 +209,7 @@ input[type = submit]:hover{
         			<label for="department">Department</label>
         		</div>
         		<div class="col-75">
-        			<input type="text" id="department" name="department" placeholder="Enter department...">
+        			<input type="text" id="department" name="name" placeholder="Enter department...">
         		</div>
         	</div>
         	
@@ -540,7 +540,7 @@ input[type = submit]:hover{
         				<label for="chargeId">Project Id</label>
         			</div>
         			<div class="col-75">
-        				<input type="text" id="chargeId" name="chargeId" placeholder="Enter project Id...">
+        				<input type="text" id="chargeId" name="chargeid" placeholder="Enter project Id...">
         			</div>
         		</div>
         		<!-- project status -->
@@ -573,10 +573,10 @@ input[type = submit]:hover{
         		<!-- project start date -->
         		<div class="row">
         			<div class="col-25">
-        				<label for="startDate">Start Date</label>
+        				<label for="startdate">Start Date</label>
         			</div>
         			<div class="col-75">
-        				<input type="text" id="startDate" name="startDate" placeholder="Project start from...">
+        				<input type="text" id="startdate" name="startdate" placeholder="Project start from...">
         			</div>
         		</div>
         		<!-- project finish date -->
@@ -585,7 +585,7 @@ input[type = submit]:hover{
         				<label for="finishDate">Finish Date</label>
         			</div>
         			<div class="col-75">
-        				<input type="text" id="finishDate" name="finishDate" placeholder="To...">
+        				<input type="text" id="finishdate" name="finishdate" placeholder="To...">
         			</div>
         		</div>
         		<!-- customer -->
@@ -614,7 +614,7 @@ input[type = submit]:hover{
 		<div>
 			<h2>Search Project</h2>
 			<form action="searchProject" method="get">
-				ID of project: <input type="text" name="chargeId">
+				ID of project: <input type="text" name="chargeid">
 				<input type="submit" value="Search">
 			</form>
 		</div>
@@ -635,10 +635,10 @@ input[type = submit]:hover{
         		<!-- project id -->
         		<div class="row">
         			<div class="col-25">
-        				<label for="chargeId">Project Id</label>
+        				<label for="chargeid">Project Id</label>
         			</div>
         			<div class="col-75">
-        				<input type="text" id="chargeId" name="chargeId" placeholder="Enter project Id...">
+        				<input type="text" id="chargeid" name="chargeid" placeholder="Enter project Id...">
         			</div>
         		</div>
         		<!-- project status -->
@@ -671,19 +671,19 @@ input[type = submit]:hover{
         		<!-- project start date -->
         		<div class="row">
         			<div class="col-25">
-        				<label for="startDate">Start Date</label>
+        				<label for="startdate">Start Date</label>
         			</div>
         			<div class="col-75">
-        				<input type="text" id="startDate" name="startDate">
+        				<input type="text" id="startdate" name="startdate">
         			</div>
         		</div>
         		<!-- project finish date -->
         		<div class="row">
         			<div class="col-25">
-        				<label for="finishDate">Finish Date</label>
+        				<label for="finishdate">Finish Date</label>
         			</div>
         			<div class="col-75">
-        				<input type="text" id="finishDate" name="finishDate">
+        				<input type="text" id="finishdate" name="finishdate">
         			</div>
         		</div>
         		<!-- customer -->
@@ -704,7 +704,7 @@ input[type = submit]:hover{
 	<div id="Relationship" class="tabcontent">
 		<form action="relation" method="get">
 			<p>Relation between Person and Department</p>
-			Person Name	<input type="text" name="userName">
+			Person ID	<input type="text" name="userId">
 			Department	<input type="text" name="department">
 			<input type="submit" value="submit"><br>
 		</form>
@@ -716,13 +716,13 @@ input[type = submit]:hover{
 		</form>
 		<form action="relation" method="get">
 			<p>Relation between Person and Project(work in)</p>
-			Person Name	<input type="text" name="userName">
+			Person ID	<input type="text" name="userId">
 			Project		<input type="text" name="project">
 			<input type="submit" value="submit"><br>
 		</form>
 		<form action="relation"	method="get">
 			<p>Relation between Person and Technology</p>
-			Person Name	<input type="text" name="userName">
+			Person ID	<input type="text" name="userId">
 			Technology	<input type="text" name="techName">
 			<input type="submit" value="submit"><br>
 		</form><br>

@@ -42,14 +42,14 @@ public class Project {
 	}
 	
 	// add or update more properties  	
-	public Task addProjectId(String project, String chargeId){
+	public Task addProjectId(String project, String chargeid){
 		Task task = new Task();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
 				tx.run(//"CREATE CONSTRAIN ON (p:Project) ASSERT p.chargId IS UNIQUE" +
 						"MATCH (p:Project{project:$project})"+
-						"SET p.chargeId= $chargeId",
-						parameters("project",project, "chargeId",chargeId));
+						"SET p.chargeid= $chargeid",
+						parameters("project",project, "chargeid",chargeid));
 				tx.success();
 			}
 		}
@@ -98,28 +98,28 @@ public class Project {
 		return task;
 	}
 	
-	public Task addProjectStart(String project, String startDate){
+	public Task addProjectStart(String project, String startdate){
 		Task task = new Task();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
 				tx.run(//"CREATE CONSTRAIN ON (p:Project) ASSERT p.chargId IS UNIQUE" +
 						"MATCH (p:Project{project:$project})"+
-						" SET p.startDate= $startDate",
-						parameters("project",project, "startDate",startDate));
+						" SET p.startdate= $startdate",
+						parameters("project",project, "startdate",startdate));
 				tx.success();
 			}
 		}
 		return task;
 	}
 	
-	public Task addProjectFinish(String project, String finishDate){
+	public Task addProjectFinish(String project, String finishdate){
 		Task task = new Task();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
 				tx.run(//"CREATE CONSTRAIN ON (p:Project) ASSERT p.chargId IS UNIQUE" +
 						"MATCH (p:Project{project:$project})"+
-						"SET p.finishDate= $finishDate",
-						parameters("project",project, "finishDate",finishDate));
+						"SET p.finishdate= $finishdate",
+						parameters("project",project, "finishdate",finishdate));
 				tx.success();
 			}
 		}
@@ -145,7 +145,7 @@ public class Project {
 	    	List<Task> task = new ArrayList<Task>();
 	        try (Session session = driver.session()){
 	        	 StatementResult result = session.run(
-	                     "MATCH (a:Project) WHERE a.chargeId = {x} RETURN a.project AS project, a.chargeId AS chargeId, a.status AS status, a.description AS description, a.domain AS domain, a.startDate AS startDate, a.finishDate AS finishDate, a.customer AS customer",
+	                     "MATCH (a:Project) WHERE a.chargeid = {x} RETURN a.project AS project, a.chargeid AS chargeid, a.status AS status, a.description AS description, a.domain AS domain, a.startdate AS startdate, a.finishdate AS finishdate, a.customer AS customer",
 	                     parameters("x", initial));
 	             // Each Cypher execution returns a stream of records.
 	        	while(result.hasNext()){
@@ -153,12 +153,12 @@ public class Project {
 	        		 Task tmpTask = new Task();
 	        		 
 	    			 tmpTask.setProject(record.get("project").asString());
-	    			 tmpTask.setChargeId(record.get("chargeId").asString());
+	    			 tmpTask.setChargeid(record.get("chargeid").asString());
 	    			 tmpTask.setProStatus(record.get("status").asString());
 	    			 tmpTask.setProDescription(record.get("description").asString());
 	    			 tmpTask.setProDomain(record.get("domain").asString());
-	    			 tmpTask.setStartDate(record.get("startDate").asString());
-	    			 tmpTask.setFinishDate(record.get("finishDate").asString());
+	    			 tmpTask.setStartdate(record.get("startdate").asString());
+	    			 tmpTask.setFinishdate(record.get("finishdate").asString());
 	    			 tmpTask.setCustomer(record.get("customer").asString());
 	        		 
 	    			 task.add(tmpTask);

@@ -30,14 +30,14 @@ public class Relationship {
 	}
 	
 	// relationship between person and department
-	public Rela relaPersonDepart(String userName, String department){
+	public Rela relaPersonDepart(String userId, String department){
 		Rela rela = new Rela();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
-				tx.run("MATCH (p:Person{name: $name}) " +
-						"MATCH (d:Department{department: $department}) " +
+				tx.run("MATCH (p:Person{id: $id}) " +
+						"MATCH (d:Department{name: $name}) " +
 						"CREATE (p)-[r:BELONG_TO]->(d)",
-						parameters("name", userName, "department", department)
+						parameters("id", userId, "name", department)
 						);
 				tx.success();
 			}
@@ -63,10 +63,10 @@ public class Relationship {
 		Rela rela = new Rela();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
-				tx.run("MATCH (t:Technology{technology: $technology}) " +
+				tx.run("MATCH (t:Technology{name: $name}) " +
 						"MATCH (P:Project{project: $project}) " +
 						"CREATE (t)-[:USED_IN]->(P)",
-						parameters("technology", techName, "project", project)
+						parameters("name", techName, "project", project)
 						);
 				tx.success();
 			}
@@ -88,14 +88,14 @@ public class Relationship {
 	}
 	
 	// relationship between person and technology
-	public Rela relaPerTech(String userName, String techName){
+	public Rela relaPerTech(String userId, String techName){
 		Rela rela = new Rela();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
-				tx.run("MATCH (p:Person{name: $name}) " +
-						"MATCH (t:Technology{technology: $technology}) " +
+				tx.run("MATCH (p:Person{id: $id}) " +
+						"MATCH (t:Technology{name: $name}) " +
 						"CREATE (p)-[r:HAS_EXPERIENCE]->(t)",
-						parameters("name", userName, "technology", techName)
+						parameters("id", userId, "name", techName)
 						);
 				tx.success();
 			}
@@ -117,14 +117,14 @@ public class Relationship {
 	}
 	
 	// relationship between person and project
-	public Rela relaPerPro(String userName, String project){
+	public Rela relaPerPro(String userId, String project){
 		Rela rela = new Rela();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
-				tx.run("MATCH (p:Person{name: $name}) " +
+				tx.run("MATCH (p:Person{id: $id}) " +
 						"MATCH (P:Project{project: $project}) " +
 						"CREATE (p)-[r:WORK_IN]->(P)",
-						parameters("name", userName, "project", project)
+						parameters("id", userId, "project", project)
 						);
 				tx.success();
 			}
@@ -144,19 +144,7 @@ public class Relationship {
 		return rela;
 	}
 	
-	// still relation btw person project but this's one for leader
-	public Rela relaPersonProject2(String userName, String project){
-		Rela rela = new Rela();
-		try(Session session = driver.session()){
-			try(Transaction tx = session.beginTransaction()){
-				tx.run("MATCH (p:Person{name: $userName}) " +
-						"MATCH (P:Project{project: $project}) " +
-						"CREATE (p)-[r:LEAD]->(P)",
-						parameters("userName", userName, "project", project));
-			}
-		}
-		return rela;
-	}
+
 	
 	public Rela printRelaPp(){
 		Rela rela = new Rela();
@@ -187,8 +175,8 @@ public class Relationship {
    			 tmpUser.setUserName(record.get("name").asString());
    			 tmpUser.setUserId(record.get("id").asString());
    			 tmpUser.setTitle(record.get("title").asString());
-   			 tmpUser.setBirthday(record.get("birthday").asString());
-   			 tmpUser.setJoin(record.get("join").asString());
+   			 tmpUser.setBirthday(record.get("birthday").asInt());
+  			 tmpUser.setJoin(record.get("join").asInt());
    			 tmpUser.setStatus(record.get("status").asString());
    			 
    			 user.add(tmpUser);
@@ -214,8 +202,8 @@ public class Relationship {
 	   			 tmpUser.setUserName(record.get("name").asString());
 	   			 tmpUser.setUserId(record.get("id").asString());
 	   			 tmpUser.setTitle(record.get("title").asString());
-	   			 tmpUser.setBirthday(record.get("birthday").asString());
-	   			 tmpUser.setJoin(record.get("join").asString());
+	   			 tmpUser.setBirthday(record.get("birthday").asInt());
+	   			 tmpUser.setJoin(record.get("join").asInt());
 	   			 tmpUser.setStatus(record.get("status").asString());
 	   			 
 	   			 user.add(tmpUser);
@@ -241,8 +229,8 @@ public class Relationship {
 	   			 tmpUser.setUserName(record.get("name").asString());
 	   			 tmpUser.setUserId(record.get("id").asString());
 	   			 tmpUser.setTitle(record.get("title").asString());
-	   			 tmpUser.setBirthday(record.get("birthday").asString());
-	   			 tmpUser.setJoin(record.get("join").asString());
+	   			 tmpUser.setBirthday(record.get("birthday").asInt());
+	   			 tmpUser.setJoin(record.get("join").asInt());
 	   			 tmpUser.setStatus(record.get("status").asString());
 	   			 
 	   			 user.add(tmpUser);

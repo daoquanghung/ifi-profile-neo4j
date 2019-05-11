@@ -1,7 +1,7 @@
 package com.ifi.profile.model;
 
 public class Rela {
-	private String userName;
+	private String userId;
 	private String department;
 	private String techName;
 	private String project;
@@ -13,11 +13,12 @@ public class Rela {
 	public void setRelation(String relation) {
 		this.relation = relation;
 	}
-	public String getUserName() {
-		return userName;
+	
+	public String getUserId() {
+		return userId;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	public String getDepartment() {
 		return department;
