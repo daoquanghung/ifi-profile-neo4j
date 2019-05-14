@@ -1,47 +1,46 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@ page session="false"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
-<title>Home</title>
-
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Person</title>
 </head>
 <body>
-	<jsp:include page="_header.jsp"></jsp:include>
-	<h2>Information of ${user.userName }</h2>
-	<table>
-		<tr>
-			<td>Name</td>
-			<td>${user.userName}</td>
-		</tr>
-		<tr>
-			<td>ID</td>
-			<td>${user.userId}</td>
-		</tr>
-		<tr>
-			<td>Title</td>
-			<td>${user.title}</td>
-		</tr>
-		<tr>
-			<td>Birthday</td>
-			<td>${user.birthday}</td>
-		</tr>
-		<tr>
-			<td>Join</td>
-			<td>${user.join}</td>
-		</tr>
-		<tr>
-			<td>Status</td>
-			<td>${user.status}</td>
-		</tr>
-		<tr>
-			<td></td>
-		</tr>
-	</table>
+<jsp:include page="_header.jsp"></jsp:include>
+	<div class="tab">
+		<button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">Home</button>
+		<button class="tablinks" onclick="openTab(event, 'Projects')" >Projects</button>
+		<button class="tablinks" onclick="openTab(event, 'Staff')">Staff</button>
+		<button class="tablinks" onclick="openTab(event, 'Technologies')">Technologies</button>
+		<button class="tablinks" onclick="openTab(event, 'Relationship')">Relationship</button>
+	</div>
 	
+	<div class="tabcontent" id="Staff">
+	<h3>Information of ${user.userName} </h3>
 	
-	
+		<table border="1px" width="100%" cellspacing="1px">
+		
+			<tr>
+				<td>Name</td>
+				<td>ID</td>
+				<td>Title</td>
+				<td>Birthday</td>
+				<td>Join</td>
+				<td>Status</td>
+			</tr>
+			
+			<tr>
+				<td><c:out value="${user.userName}"></c:out></td>
+				<td><c:out value="${user.userId}"></c:out></td>
+				<td><c:out value="${user.title}"></c:out></td>
+				<td><c:out value="${user.birthday}"></c:out></td>
+				<td><c:out value="${user.join}"></c:out></td>
+				<td><c:out value="${user.status}"></c:out></td>
+			</tr>
+		
+		</table>
+	</div>
 </body>
 </html>

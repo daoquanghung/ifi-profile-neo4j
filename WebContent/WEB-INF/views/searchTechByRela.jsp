@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Project</title>
+<title>Insert title here</title>
 </head>
 <body>
 <jsp:include page="_header.jsp"></jsp:include>
@@ -17,33 +17,36 @@
 		<button class="tablinks" onclick="openTab(event, 'Relationship')">Relationship</button>
 	</div>
 	
-	<div class="tabcontent" id="Projects">
-	<h3>Information of ${task.project } </h3>
+	<div class="tabcontent" id="Technologies">
+	<h3>Information of technology searched </h3>
 	
 		<table border="1px" width="100%" cellspacing="1px">
 		
 			<tr>
 				<td>Name</td>
-				<td>Charge Id</td>
-				<td>Status</td>
 				<td>Description</td>
+				<td>Category</td>
 				<td>Domain</td>
-				<td>Start Date</td>
-				<td>Finish Date</td>
-				<td>Customer</td>
 			</tr>
 			
+			<c:forEach var="listValue" items="${listByPro}">
 			<tr>
-				<td><c:out value="${task.project}"></c:out></td>
-				<td><c:out value="${task.chargeid}"></c:out></td>
-				<td><c:out value="${task.proStatus}"></c:out></td>
-				<td><c:out value="${task.proDescription}"></c:out></td>
-				<td><c:out value="${task.proDomain}"></c:out></td>
-				<td><c:out value="${task.startdate}"></c:out></td>
-				<td><c:out value="${task.finishdate}"></c:out></td>
-				<td><c:out value="${task.customer}"></c:out></td>
+				<td><c:out value="${listValue.techName}"></c:out></td>
+				<td><c:out value="${listValue.techDescription}"></c:out></td>
+				<td><c:out value="${listValue.techCategory}"></c:out></td>
+				<td><c:out value="${listValue.techDomain}"></c:out></td>
 			</tr>
+			</c:forEach>
 			
+			<c:forEach var="list" items="${listByPer}">
+			<tr>
+				<td><c:out value="${list.techName}"></c:out></td>
+				<td><c:out value="${list.techDescription}"></c:out></td>
+				<td><c:out value="${list.techCategory}"></c:out></td>
+				<td><c:out value="${list.techDomain}"></c:out></td>
+			</tr>
+			</c:forEach>
+		
 		</table>
 	</div>
 </body>

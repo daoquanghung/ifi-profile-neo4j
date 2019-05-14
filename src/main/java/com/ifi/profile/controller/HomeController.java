@@ -76,7 +76,7 @@ public class HomeController {
 		
 		User addTitle = person.addPersonTitle(user.getUserName(), user.getTitle());
 		User addBirth = person.addPersonBirthday(user.getUserName(), user.getBirthday());
-		User addJoin = person.addPersonJoin(user.getUserName(), user.getJoin());
+		User addJoin = person.addPersonJoin(user.getUserName(),user.getJoin());
 		User addStatus = person.addPersonStatus(user.getUserName(), user.getStatus());
 		
 
@@ -260,11 +260,11 @@ public class HomeController {
 		// relation between person and department
 		Rela relaPerDe = relate.relaPersonDepart(rela.getUserId(), rela.getDepartment());
 		// relation between project and technology
-		Rela relaProTech = relate.relaProTech(rela.getTechName(), rela.getProject());
+		Rela relaProTech = relate.relaProTech(rela.getTechName(), rela.getChargeId());
 		//relation between person and technology
 		Rela relaPerTech = relate.relaPerTech(rela.getUserId(), rela.getTechName());
 		// relation between person and project (work in)
-		Rela relaPerPro = relate.relaPerPro(rela.getUserId(), rela.getProject());
+		Rela relaPerPro = relate.relaPerPro(rela.getUserId(), rela.getChargeId());
 		
 		relate.close();
 		
@@ -325,11 +325,11 @@ public class HomeController {
 	public String searchPersonByRela(@Validated Rela rela, Model model){
 		Relationship relat = new Relationship("bolt://localhost:7687", "neo4j", "11111111");
 		// search by department
-		List<User> listPerson = relat.searchByRela(rela.getRelation());
+		List<User> listPerson = relat.searchByRela(rela.getRelation(), rela.getDepartment());
 		// search by project
-		List<User> listPersonByProject = relat.searchByProject(rela.getRelation());
+		List<User> listPersonByProject = relat.searchByProject(rela.getRelation(), rela.getChargeId());
 		// search by technology
-		List<User> listPersonByTech = relat.searchByTech(rela.getRelation());
+		List<User> listPersonByTech = relat.searchByTech(rela.getRelation(), rela.getTechName());
 		
 		relat.close();
 		
@@ -340,5 +340,44 @@ public class HomeController {
 		model.addAttribute("relation", rela.getRelation());
 
 		return "searchPersonByRela";
+	}
+	
+	// Search Technology by relationship
+	@RequestMapping(value = {"/searchTechByRela"}, method = RequestMethod.GET)
+	public String searchTechByRela(@Validated Rela rela, Model model){
+		Relationship relat = new Relationship("bolt://localhost:7687", "neo4j", "11111111");
+		// search by project
+		List<Tech> listTechByProject = relat.searchTechByPro(rela.getRelation(), rela.getChargeId());
+		// search by technology
+		List<Tech> listTechByPerson = relat.searchTechByPer(rela.getRelation(), rela.getUserName());
+		
+		relat.close();
+		
+		
+		model.addAttribute("listByPro", listTechByProject);
+		model.addAttribute("listByPer", listTechByPerson);
+		
+		model.addAttribute("relation", rela.getRelation());
+
+		return "searchTechByRela";
+	}
+	
+	// Search Project by relationship
+	@RequestMapping(value = {"/searchProjectByRela"}, method = RequestMethod.GET)
+	public String searchProjectByRela(@Validated Rela rela, Model model){
+		Relationship relat = new Relationship("bolt://localhost:7687", "neo4j", "11111111");
+		// search by project
+		List<Task> listProjectByPerson = relat.searchProByPer(rela.getRelation(), rela.getUserName());
+		// search by technology
+		List<Task> listrojectByTech = relat.searchProByTech(rela.getRelation(), rela.getTechName());
+		
+		relat.close();
+		
+		model.addAttribute("listByPer", listProjectByPerson);
+		model.addAttribute("listByTech", listrojectByTech);
+		
+		model.addAttribute("relation", rela.getRelation());
+
+		return "searchProjectByRela";
 	}
 }

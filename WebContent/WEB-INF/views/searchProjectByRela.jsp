@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Project</title>
+<title>Insert title here</title>
 </head>
 <body>
 <jsp:include page="_header.jsp"></jsp:include>
@@ -18,7 +18,7 @@
 	</div>
 	
 	<div class="tabcontent" id="Projects">
-	<h3>Information of ${task.project } </h3>
+	<h3>Information of person searched </h3>
 	
 		<table border="1px" width="100%" cellspacing="1px">
 		
@@ -33,17 +33,32 @@
 				<td>Customer</td>
 			</tr>
 			
+			<c:forEach var="listValue" items="${listByPer}">
 			<tr>
-				<td><c:out value="${task.project}"></c:out></td>
-				<td><c:out value="${task.chargeid}"></c:out></td>
-				<td><c:out value="${task.proStatus}"></c:out></td>
-				<td><c:out value="${task.proDescription}"></c:out></td>
-				<td><c:out value="${task.proDomain}"></c:out></td>
-				<td><c:out value="${task.startdate}"></c:out></td>
-				<td><c:out value="${task.finishdate}"></c:out></td>
-				<td><c:out value="${task.customer}"></c:out></td>
+				<td><c:out value="${listValue.project}"></c:out></td>
+				<td><c:out value="${listValue.chargeid}"></c:out></td>
+				<td><c:out value="${listValue.proStatus}"></c:out></td>
+				<td><c:out value="${listValue.proDescription}"></c:out></td>
+				<td><c:out value="${listValue.proDomain}"></c:out></td>
+				<td><c:out value="${listValue.startdate}"></c:out></td>
+				<td><c:out value="${listValue.finishdate}"></c:out></td>
+				<td><c:out value="${listValue.customer}"></c:out></td>
 			</tr>
+			</c:forEach>
 			
+			<c:forEach var="list" items="${listByTech}">
+			<tr>
+				<td><c:out value="${list.project}"></c:out></td>
+				<td><c:out value="${list.chargeid}"></c:out></td>
+				<td><c:out value="${list.proStatus}"></c:out></td>
+				<td><c:out value="${list.proDescription}"></c:out></td>
+				<td><c:out value="${list.proDomain}"></c:out></td>
+				<td><c:out value="${list.startdate}"></c:out></td>
+				<td><c:out value="${list.finishdate}"></c:out></td>
+				<td><c:out value="${list.customer}"></c:out></td>
+			</tr>
+			</c:forEach>
+		
 		</table>
 	</div>
 </body>

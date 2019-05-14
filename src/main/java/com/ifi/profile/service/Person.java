@@ -13,6 +13,7 @@ import org.neo4j.driver.Session;
 import org.neo4j.driver.StatementResult;
 import org.neo4j.driver.Transaction;
 
+
 import com.ifi.profile.model.User;
 
 public class Person {
@@ -92,8 +93,8 @@ public class Person {
     	try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
 				tx.run("MATCH (p:Person{name: $name}) " +
-						"SET p.birthday= $birthday",
-						parameters("name", name, "birthday",Integer.toString(birthday)));
+						"SET p.birthday= $birthday", //"SET p.birthday= "+birthday ,
+						parameters("name", name, "birthday",birthday+""));
 				tx.success();
 			}
 		}
@@ -106,7 +107,7 @@ public class Person {
 			try(Transaction tx = session.beginTransaction()){
 				tx.run("MATCH (p:Person{name: $name}) " +
 						"SET p.join= $join",
-						parameters("name", name, "join",Integer.toString(join)));
+						parameters("name", name, "join",join));
 				tx.success();
 			}
 		}
@@ -179,8 +180,17 @@ public class Person {
     			 tmpUser.setUserName(record.get("name").asString());
     			 tmpUser.setUserId(record.get("id").asString());
     			 tmpUser.setTitle(record.get("title").asString());
-    			 tmpUser.setBirthday(record.get("birthday").asInt());
-	   			 tmpUser.setJoin(record.get("join").asInt());
+    			 try{
+    				 tmpUser.setBirthday(record.get("birthday").asInt());
+    			 } catch (Exception ex){
+    				 tmpUser.setBirthday(Integer.parseInt(record.get("birthday").asString()));
+    			 }
+    			 try{
+    				 tmpUser.setJoin(record.get("join").asInt());
+    			 } catch (Exception ex){
+    				 tmpUser.setJoin(Integer.parseInt(record.get("join").asString()));
+    			 }
+	   			 
     			 tmpUser.setStatus(record.get("status").asString());
     			 
     			 user.add(tmpUser);

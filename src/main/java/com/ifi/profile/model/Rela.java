@@ -2,10 +2,12 @@ package com.ifi.profile.model;
 
 public class Rela {
 	private String userId;
+	private String userName;
 	private String department;
 	private String techName;
-	private String project;
+	private String chargeId;
 	private String relation;
+
 	
 	public String getRelation() {
 		return relation;
@@ -14,6 +16,12 @@ public class Rela {
 		this.relation = relation;
 	}
 	
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 	public String getUserId() {
 		return userId;
 	}
@@ -32,14 +40,12 @@ public class Rela {
 	public void setTechName(String techName) {
 		this.techName = techName;
 	}
-	public String getProject() {
-		return project;
+	public String getChargeId() {
+		return chargeId;
 	}
-	public void setProject(String project) {
-		this.project = project;
+	public void setChargeId(String chargeId) {
+		this.chargeId = chargeId;
 	}
-	
-	
 	
 	
 }

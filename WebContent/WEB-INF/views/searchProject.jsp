@@ -36,12 +36,12 @@
 			<c:forEach var="listValue" items="${lists}">
 			<tr>
 				<td><c:out value="${listValue.project}"></c:out></td>
-				<td><c:out value="${listValue.chargeId}"></c:out></td>
+				<td><c:out value="${listValue.chargeid}"></c:out></td>
 				<td><c:out value="${listValue.proStatus}"></c:out></td>
 				<td><c:out value="${listValue.proDescription}"></c:out></td>
 				<td><c:out value="${listValue.proDomain}"></c:out></td>
-				<td><c:out value="${listValue.startDate}"></c:out></td>
-				<td><c:out value="${listValue.finishDate}"></c:out></td>
+				<td><c:out value="${listValue.startdate}"></c:out></td>
+				<td><c:out value="${listValue.finishdate}"></c:out></td>
 				<td><c:out value="${listValue.customer}"></c:out></td>
 			</tr>
 			</c:forEach>

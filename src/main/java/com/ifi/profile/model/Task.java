@@ -17,8 +17,6 @@ public class Task {
 		this.project = project;
 	}
 	
-	
-	
 	public String getProStatus() {
 		return proStatus;
 	}

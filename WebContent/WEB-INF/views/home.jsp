@@ -711,13 +711,13 @@ input[type = submit]:hover{
 		<form action="relation" method="get">
 			<p>Relation between Project and Technology</p>
 			Technology	<input type="text" name="techName">
-			Project		<input type="text" name="project">
+			Project	ID	<input type="text" name="chargeId">
 			<input type="submit" value="submit"><br>
 		</form>
 		<form action="relation" method="get">
 			<p>Relation between Person and Project(work in)</p>
 			Person ID	<input type="text" name="userId">
-			Project		<input type="text" name="project">
+			Project	ID	<input type="text" name="chargeId">
 			<input type="submit" value="submit"><br>
 		</form>
 		<form action="relation"	method="get">
@@ -730,14 +730,46 @@ input[type = submit]:hover{
 		<!-- Search person by relationship -->
 		<p>Search person by relationship</p>
 		<form action="searchPersonByRela" method="get">
-			<select>
-				<option value="relation">BELONG_TO</option>
-				<option value="relation">WORK_IN</option>
-				<option value="relation">HAS_EXPERIENCE</option>
+<!-- 			<select name="carlist" form="carform"> -->
+<!-- 			  <option value="volvo">Volvo</option> -->
+<!-- 			  <option value="saab">Saab</option> -->
+<!-- 			  <option value="opel">Opel</option> -->
+<!-- 			  <option value="audi">Audi</option> -->
+<!-- 			</select> -->
+			<select name="relation">
+				<option value="BELONG_TO">BELONG_TO</option>
+				<option value="WORK_IN">WORK_IN</option>
+				<option value="HAS_EXPERIENCE">HAS_EXPERIENCE</option>
 			</select>
-			<input type="submit" value="Submit">
+			Department 	<input type="text" name="department">
+			Project		<input type="text" name="chargeId">
+			Technology	<input type="text" name="techName"><br>
+			<input type="submit" value="Search"><br>
 		</form>
 		
+		<!-- Search Technology by relationship -->
+		<p>Search Technology by relationship</p>
+		<form action="searchTechByRela" method="get">
+			<select name="relation">
+				<option value="USED_IN">USED_IN</option>
+				<option value="HAS_EXPERIENCE">HAS_EXPERIENCE</option>
+			</select>
+			Project		<input type="text" name="chargeId">
+			Person		<input type="text" name="userName"><br>
+			<input type="submit" value="Search"><br>
+		</form>
+		
+		<!-- Search Project by relationship -->
+		<p>Search Project by relationship</p>
+		<form action="searchProjectByRela" method="get">
+			<select name="relation">
+				<option value="WORK_IN">WORK_IN</option>
+				<option value="USED_IN">USED_IN</option>
+			</select>
+			Person		<input type="text" name="userName">
+			Technology	<input type="text" name="techName"><br>
+			<input type="submit" value="Search"><br>
+		</form>
 		
 	</div>
 	

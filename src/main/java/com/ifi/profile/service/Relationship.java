@@ -18,6 +18,8 @@ import org.neo4j.driver.Transaction;
 
 import com.ifi.profile.model.Rela;
 import com.ifi.profile.model.User;
+import com.ifi.profile.model.Tech;
+import com.ifi.profile.model.Task;
 
 public class Relationship {
 	Driver driver;
@@ -59,14 +61,14 @@ public class Relationship {
 	}
 	
 	// relationship between project and technology
-	public Rela relaProTech(String techName, String project){
+	public Rela relaProTech(String techName, String chargeId){
 		Rela rela = new Rela();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
 				tx.run("MATCH (t:Technology{name: $name}) " +
-						"MATCH (P:Project{project: $project}) " +
+						"MATCH (P:Project{chargeid: $chargeid}) " +
 						"CREATE (t)-[:USED_IN]->(P)",
-						parameters("name", techName, "project", project)
+						parameters("name", techName, "chargeid", chargeId)
 						);
 				tx.success();
 			}
@@ -117,14 +119,14 @@ public class Relationship {
 	}
 	
 	// relationship between person and project
-	public Rela relaPerPro(String userId, String project){
+	public Rela relaPerPro(String userId, String chargeId){
 		Rela rela = new Rela();
 		try(Session session = driver.session()){
 			try(Transaction tx = session.beginTransaction()){
 				tx.run("MATCH (p:Person{id: $id}) " +
-						"MATCH (P:Project{project: $project}) " +
+						"MATCH (P:Project{chargeid: $chargeid}) " +
 						"CREATE (p)-[r:WORK_IN]->(P)",
-						parameters("id", userId, "project", project)
+						parameters("id", userId, "chargeid", chargeId)
 						);
 				tx.success();
 			}
@@ -160,13 +162,14 @@ public class Relationship {
 	
 	
 	// search person by relation with department
-	public List<User> searchByRela(String rela){
+	public List<User> searchByRela(String r, String department){
 		List<User> user = new ArrayList<User>();
 		try(Session session = driver.session()){
 			StatementResult result = session.run(
-					"MATCH (a:Person)-[r:BELONG_TO]->(d:Department)" +
+					"MATCH (a:Person)-[r]->(d:Department{name: $name}) " +
+					"WHERE type(r) = $r " +
 					"RETURN a.name AS name, a.id AS id, a.title AS title, a.birthday AS birthday, a.join AS join, a.status AS status ",
-					parameters("rela", rela)
+					parameters("r", r, "name",department)
 					);
 			while(result.hasNext()){
        		 Record record = result.next();
@@ -175,8 +178,8 @@ public class Relationship {
    			 tmpUser.setUserName(record.get("name").asString());
    			 tmpUser.setUserId(record.get("id").asString());
    			 tmpUser.setTitle(record.get("title").asString());
-   			 tmpUser.setBirthday(record.get("birthday").asInt());
-  			 tmpUser.setJoin(record.get("join").asInt());
+   			tmpUser.setBirthday(record.get("birthday").asInt());
+   			tmpUser.setJoin(record.get("join").asInt());
    			 tmpUser.setStatus(record.get("status").asString());
    			 
    			 user.add(tmpUser);
@@ -187,13 +190,14 @@ public class Relationship {
 	}
 	
 	// search person by relation with project
-		public List<User> searchByProject(String rela){
+		public List<User> searchByProject(String r, String chargeId){
 			List<User> user = new ArrayList<User>();
 			try(Session session = driver.session()){
 				StatementResult result = session.run(
-						"MATCH (a:Person)-[r:WORK_IN]->(p:Project) " +	
+						"MATCH (a:Person)-[r]->(p:Project{chargeid: $chargeid}) " +	
+						"WHERE type(r) = $r " +
 						"RETURN a.name AS name, a.id AS id, a.title AS title, a.birthday AS birthday, a.join AS join, a.status AS status ",
-						parameters("rela", rela)
+						parameters("r", r, "chargeid",chargeId)
 						);
 				while(result.hasNext()){
 	       		 Record record = result.next();
@@ -202,8 +206,8 @@ public class Relationship {
 	   			 tmpUser.setUserName(record.get("name").asString());
 	   			 tmpUser.setUserId(record.get("id").asString());
 	   			 tmpUser.setTitle(record.get("title").asString());
-	   			 tmpUser.setBirthday(record.get("birthday").asInt());
-	   			 tmpUser.setJoin(record.get("join").asInt());
+	   			tmpUser.setBirthday(record.get("birthday").asInt());
+	   			tmpUser.setJoin(record.get("join").asInt());
 	   			 tmpUser.setStatus(record.get("status").asString());
 	   			 
 	   			 user.add(tmpUser);
@@ -214,13 +218,14 @@ public class Relationship {
 		}
 		
 		// search person by relation with technology
-		public List<User> searchByTech(String rela){
+		public List<User> searchByTech(String r, String name){
 			List<User> user = new ArrayList<User>();
 			try(Session session = driver.session()){
 				StatementResult result = session.run(	
-						"MATCH (a:Person)-[r:HAS_EXPERIENCE]->(t:Technology) " +
+						"MATCH (a:Person)-[r]->(t:Technology{name: $name}) " +
+						"WHERE type(r) = $r " +
 						"RETURN a.name AS name, a.id AS id, a.title AS title, a.birthday AS birthday, a.join AS join, a.status AS status ",
-						parameters("rela", rela)
+						parameters("r", r, "name",name)
 						);
 				while(result.hasNext()){
 	       		 Record record = result.next();
@@ -229,8 +234,8 @@ public class Relationship {
 	   			 tmpUser.setUserName(record.get("name").asString());
 	   			 tmpUser.setUserId(record.get("id").asString());
 	   			 tmpUser.setTitle(record.get("title").asString());
-	   			 tmpUser.setBirthday(record.get("birthday").asInt());
-	   			 tmpUser.setJoin(record.get("join").asInt());
+	   			tmpUser.setBirthday(record.get("birthday").asInt());
+	   			tmpUser.setJoin(record.get("join").asInt());
 	   			 tmpUser.setStatus(record.get("status").asString());
 	   			 
 	   			 user.add(tmpUser);
@@ -240,8 +245,122 @@ public class Relationship {
 			return user;
 		}
 	
-	// search 
+	// search technology by relation
 	
+	// Search technology by person
+		public List<Tech> searchTechByPer(String r, String name){
+			List<Tech> tech = new ArrayList<Tech>();
+			try(Session session = driver.session()){
+				StatementResult result = session.run(	
+						"MATCH (a:Person{name: $name})-[r]->(t:Technology) " +
+						"WHERE type(r) = $r " +
+						"RETURN t.name AS name, t.description AS description, t.category AS category, t.domain AS domain",
+						parameters("r", r, "name",name)
+						);
+				while(result.hasNext()){
+	       		 Record record = result.next();
+	       		 Tech tmpTech = new Tech();
+	       		 
+	   			 tmpTech.setTechName(record.get("name").asString());
+	   			 tmpTech.setTechDescription(record.get("description").asString());
+	   			 tmpTech.setTechCategory(record.get("category").asString());
+	   			 tmpTech.setTechDomain(record.get("domain").asString());
+	   			 
+	   			 tech.add(tmpTech);
+				}
+			}
+			
+			return tech;
+		}
+		
+	// Search technology by Project
+		public List<Tech> searchTechByPro(String r, String chargeId){
+			List<Tech> tech = new ArrayList<Tech>();
+			try(Session session = driver.session()){
+				StatementResult result = session.run(	
+						"MATCH (t:Technology)-[r]->(p:Project{chargeid :$chargeid}) " +
+						"WHERE type(r) = $r " +
+						"RETURN t.name AS name, t.description AS description, t.category AS category, t.domain AS domain",
+						parameters("r", r, "chargeid",chargeId)
+						);
+				while(result.hasNext()){
+	       		 Record record = result.next();
+	       		 Tech tmpTech = new Tech();
+	       		 
+	   			 tmpTech.setTechName(record.get("name").asString());
+	   			 tmpTech.setTechDescription(record.get("description").asString());
+	   			 tmpTech.setTechCategory(record.get("category").asString());
+	   			 tmpTech.setTechDomain(record.get("domain").asString());
+	   			 
+	   			 tech.add(tmpTech);
+				}
+			}
+			
+			return tech;
+		}
+		
+	// search project by relation
+		
+		// Search project by person
+		public List<Task> searchProByPer(String r, String name){
+			List<Task> task = new ArrayList<Task>();
+			try(Session session = driver.session()){
+				StatementResult result = session.run(
+						"MATCH (p:Person{name: $name})-[r]->(a:Project) " +	
+						"WHERE type(r) = $r " +
+						"RETURN a.project AS project, a.chargeid AS chargeid, a.status AS status, a.description AS description, a.domain AS domain, a.startdate AS startdate, a.finishdate AS finishdate, a.customer AS customer ",
+						parameters("r", r, "name",name)
+						);
+				while(result.hasNext()){
+	       		 Record record = result.next();
+	       		 Task tmpTask = new Task();
+	       		 
+	       		tmpTask.setProject(record.get("project").asString());
+	       		tmpTask.setChargeid(record.get("chargeid").asString());
+	       		tmpTask.setProStatus(record.get("status").asString());
+	       		tmpTask.setProDescription(record.get("description").asString());
+	       		tmpTask.setProDomain(record.get("domain").asString());
+	       		tmpTask.setStartdate(record.get("startdate").asString());
+	       		tmpTask.setFinishdate(record.get("finishdate").asString());
+	       		tmpTask.setCustomer(record.get("customer").asString());
+	   			 
+	   			task.add(tmpTask);
+				}
+			}
+			
+			return task;
+		}
+		
+		// Search project by Technology
+		public List<Task> searchProByTech(String r, String name){
+			List<Task> task = new ArrayList<Task>();
+			try(Session session = driver.session()){
+				StatementResult result = session.run(
+						"MATCH (t:Technology{name: $name})-[r]->(a:Project) " +	
+						"WHERE type(r) = $r " +
+						"RETURN a.project AS project, a.chargeid AS chargeid, a.status AS status, a.description AS description, a.domain AS domain, a.startdate AS startdate, a.finishdate AS finishdate, a.customer AS customer ",
+						parameters("r", r, "name",name)
+						);
+				while(result.hasNext()){
+	       		 Record record = result.next();
+	       		 Task tmpTask = new Task();
+	       		 
+	       		tmpTask.setProject(record.get("project").asString());
+	       		tmpTask.setChargeid(record.get("chargeid").asString());
+	       		tmpTask.setProStatus(record.get("status").asString());
+	       		tmpTask.setProDescription(record.get("description").asString());
+	       		tmpTask.setProDomain(record.get("domain").asString());
+	       		tmpTask.setStartdate(record.get("startdate").asString());
+	       		tmpTask.setFinishdate(record.get("finishdate").asString());
+	       		tmpTask.setCustomer(record.get("customer").asString());
+	   			 
+	   			task.add(tmpTask);
+				}
+			}
+			
+			return task;
+		}
+		
 	public void close(){
 		driver.close();
 	}

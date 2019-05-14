@@ -10,6 +10,23 @@ public class User {
 	private String status;
 	
 
+	public int getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(int birthday) {
+		this.birthday = birthday;
+	}
+
+	public int getJoin() {
+		return join;
+	}
+
+	public void setJoin(int join) {
+		this.join = join;
+	}
+
+	
 	public String getUserName() {
 		return userName;
 	}
@@ -32,22 +49,6 @@ public class User {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public int getBirthday() {
-		return birthday;
-	}
-
-	public void setBirthday(int birthday) {
-		this.birthday = birthday;
-	}
-
-	public int getJoin() {
-		return join;
-	}
-
-	public void setJoin(int join) {
-		this.join = join;
 	}
 
 	public String getStatus() {
