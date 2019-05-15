@@ -20,18 +20,21 @@
 	<div class="tabcontent" id="Technologies">
 	<h3>Information of ${office.name }</h3>
 	
-		<table border="1px" width="100%" cellspacing="1px">
+		<table id="customers">
 		
 			<tr>
-				<td>Department</td>
-				<td>Description</td>
+				<th>Department</th>
+				<th>Description</th>	
 			</tr>
-			
+		
+			<c:forEach var="listValue" items="${lists}">
 			<tr>
-				<td><c:out value="${office.name}"></c:out></td>
-				<td><c:out value="${office.description}"></c:out></td>
+				<td><c:out value="${listValue.name}"></c:out></td>
+				<td><c:out value="${listValue.description}"></c:out></td>
+				
 			</tr>
-			
+			</c:forEach>
+		
 		</table>
 	</div>
 </body>

@@ -172,27 +172,34 @@ public class Project {
 	    
 	
 	// Show list project
-	public List<Task> getListTech(String initial)
+	public List<Task> printProject()
     {
-    	List<Task> ret = new ArrayList<Task>();
-        try (Session session = driver.session())
-        {
-            // Auto-commit transactions are a quick and easy way to wrap a read.
-            StatementResult result = session.run(
-                    "MATCH (p:Project) WHERE p.project STARTS WITH {x} RETURN p.project AS project",
-                    parameters("x", initial));
-            // Each Cypher execution returns a stream of records.
-            while (result.hasNext())
-            {
-            	Task tmpTask = new Task();
-                Record record = result.next();
-                // Values can be extracted from a record by index or name.
-                tmpTask.setProject(record.get("project").asString());
-                ret.add(tmpTask);
-            }
+		List<Task> task = new ArrayList<Task>();
+        try (Session session = driver.session()){
+        	 StatementResult result = session.run(
+                     "MATCH (a:Project) RETURN a.project AS project, a.chargeid AS chargeid, a.status AS status, a.description AS description, a.domain AS domain, a.startdate AS startdate, a.finishdate AS finishdate, a.customer AS customer"
+                     );
+             // Each Cypher execution returns a stream of records.
+        	while(result.hasNext()){
+        		 Record record = result.next();
+        		 Task tmpTask = new Task();
+        		 
+    			 tmpTask.setProject(record.get("project").asString());
+    			 tmpTask.setChargeid(record.get("chargeid").asString());
+    			 tmpTask.setProStatus(record.get("status").asString());
+    			 tmpTask.setProDescription(record.get("description").asString());
+    			 tmpTask.setProDomain(record.get("domain").asString());
+    			 tmpTask.setStartdate(record.get("startdate").asString());
+    			 tmpTask.setFinishdate(record.get("finishdate").asString());
+    			 tmpTask.setCustomer(record.get("customer").asString());
+        		 
+    			 task.add(tmpTask);
+        		
+        	 }
+             
         }
         
-        return ret;
+        return task;
     }
 	
 	// remove a project

@@ -1,10 +1,11 @@
 package com.ifi.profile.controller;
 
-import java.text.DateFormat;
-
-import java.util.Date;
+//import java.text.DateFormat;
+//
+//import java.util.Date;
+//import java.util.Locale;
 import java.util.List;
-import java.util.Locale;
+
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,16 +32,40 @@ public class HomeController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
+	public String home(@Validated User user, @Validated Office off, @Validated Task task, @Validated Tech tech, Model model) {
 
-		// current Date
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-
-		String formattedDate = dateFormat.format(date);
-
-		model.addAttribute("serverTime", formattedDate);
-
+//		// current Date
+//		Date date = new Date();
+//		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+//
+//		String formattedDate = dateFormat.format(date);
+//
+//		model.addAttribute("serverTime", formattedDate);
+		
+		// print list person
+		Person person = new Person("bolt://localhost:7687", "neo4j", "11111111");
+		List<User> printPerson = person.printPerson();
+		person.close();
+		model.addAttribute("printPerson", printPerson);
+		
+		// print list department
+		Department dep = new Department("bolt://localhost:7687", "neo4j", "11111111");
+		List<Office> listOff = dep.printDepartment();
+		dep.close();
+		model.addAttribute("listOff", listOff);
+						
+		// print list project
+		Project pro = new Project("bolt://localhost:7687", "neo4j", "11111111");
+		List<Task> listTask = pro.printProject();
+		pro.close();
+		model.addAttribute("listTask", listTask);
+				
+		// print list technology
+		Technology technology = new Technology("bolt://localhost:7687", "neo4j", "11111111");
+		List<Tech> listTech = technology.printTech();
+		technology.close();
+		model.addAttribute("listTech", listTech);
+		
 		return "home";
 	}
 
@@ -281,14 +306,11 @@ public class HomeController {
 	@RequestMapping(value = "/department", method = RequestMethod.GET)
 	public String department(@Validated Office off, Model model){
 		Department dep = new Department("bolt://localhost:7687", "neo4j", "11111111");
-		
-		Office addDepartment = dep.department(off.getName());
-		Office addDescription = dep.description(off.getName(), off.getDescription());
-		
+		// print list department
+		List<Office> listOff = dep.printDepartment();
 		dep.close();
-		
-		model.addAttribute("addDepartment", addDepartment);
-		model.addAttribute("addDescription", addDescription);
+		model.addAttribute("lists", listOff);
+				
 		
 		return "department";
 	}

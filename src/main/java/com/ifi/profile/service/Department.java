@@ -90,6 +90,30 @@ public class Department {
         return office;
     }
     
+    // Print department
+    public List<Office> printDepartment(){
+    	List<Office> office = new ArrayList<Office>();
+        try (Session session = driver.session()){
+        	 StatementResult result = session.run(
+                     "MATCH (d:Department) RETURN d.name AS name, d.description AS description"
+                     );
+             // Each Cypher execution returns a stream of records.
+        	while(result.hasNext()){
+        		 Record record = result.next();
+        		 Office tmpOff = new Office();
+        		 
+        		 tmpOff.setName(record.get("name").asString());
+        		 tmpOff.setDescription(record.get("description").asString());
+    			
+    			 office.add(tmpOff);
+        		
+        	 }
+             
+        }
+        
+        return office;
+    }
+    
 	public void close(){
 		driver.close();
 	}

@@ -147,6 +147,33 @@ public class Technology {
 			}
 			return tech;
 		}
+	 
+	 // Print all technology
+	 public List<Tech> printTech(){
+	    	List<Tech> tech = new ArrayList<Tech>();
+	        try (Session session = driver.session()){
+	        	 StatementResult result = session.run(
+	                     "MATCH (a:Technology) RETURN a.name AS name, a.description AS description, a.category AS category, a.domain AS domain"
+	                     );
+	             // Each Cypher execution returns a stream of records.
+	        	while(result.hasNext()){
+	        		 Record record = result.next();
+	        		 Tech tmpTech = new Tech();
+	        		 
+	    			tmpTech.setTechName(record.get("name").asString());
+	    			tmpTech.setTechDescription(record.get("description").asString());
+	    			tmpTech.setTechCategory(record.get("category").asString());
+	    			tmpTech.setTechDomain(record.get("domain").asString());
+	    			 
+	    			 tech.add(tmpTech);
+	        		
+	        	 }
+	             
+	        }
+	        
+	        return tech;
+	    }
+	    
 	
 	public void close(){
 		driver.close();

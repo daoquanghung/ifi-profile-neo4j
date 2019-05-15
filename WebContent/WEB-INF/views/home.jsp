@@ -12,7 +12,29 @@
 * {box-sizing: border-box}
 body {font-family: "Lato", sans-serif;}
 
+/* Style all the table in home page */
+#customers {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
 
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
 
 /* Style the tab */
 .tab {
@@ -147,6 +169,7 @@ input[type = submit]:hover{
 	
 	<div class="tab">
 		<button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">Home</button>
+		<button class="tablinks" onclick="openTab(event, 'Department')" >Department</button>
 		<button class="tablinks" onclick="openTab(event, 'Projects')" >Projects</button>
 		<button class="tablinks" onclick="openTab(event, 'Staff')">Staff</button>
 		<button class="tablinks" onclick="openTab(event, 'Technologies')">Technologies</button>
@@ -154,550 +177,105 @@ input[type = submit]:hover{
 	</div>
 	
 	<!-- Home page -->
-	<div id="Home" class="tabcontent">
-		<h1>Add department</h1>
-		<p>The time on the server is ${serverTime}.</p>
-		<div class="container">
-		<form action="department" method="get">
-			<div class="row">
-        		<div class="col-25">
-        			<label for="name">Department</label>
-        		</div>
-        		<div class="col-75">
-        			<input type="text" id="name" name="name" placeholder="Enter department...">
-        		</div>
-        	</div>
-        	
-        	<div class="row">
-        		<div class="col-25">
-        			<label for="description">Description</label>
-        		</div>
-        		<div class="col-75">
-        			<input type="text" id="description" name="description" placeholder="Enter department description...">
-        		</div>
-        	</div>
-        	
-        			
-			<input type="submit" value="submit"><br>
-		</form>
-		</div>
+	<div id="Department" class="tabcontent">
+		<table id="customers">
+			<tr>
+				<th>Department</th>
+				<th>Description</th>	
+			</tr>
 		
-		<!-- Remove department -->
-		<div>
-			<h2>Remove department</h2>
-			<form action="removeDepartment" method="get">
-				Department name:	<input type="text" name="name">
-				<input type="submit" value="Remove"><br>
-			</form>
-		</div>
-		
-		<!-- Search department -->
-		<div>
-			<h2>Search department</h2>
-			<form action="searchDep" method="get">
-				Department name: <input type="text" name="name">
-				<input type="submit" value="Search">
-			</form>
-		</div>
-		
-		<!-- Update department -->
-		<h1>Update department</h1>
-		<div class="container">
-		<form action="department" method="get">
-			<div class="row">
-        		<div class="col-25">
-        			<label for="department">Department</label>
-        		</div>
-        		<div class="col-75">
-        			<input type="text" id="department" name="name" placeholder="Enter department...">
-        		</div>
-        	</div>
-        	
-        	<div class="row">
-        		<div class="col-25">
-        			<label for="description">Description</label>
-        		</div>
-        		<div class="col-75">
-        			<input type="text" id="description" name="description">
-        		</div>
-        	</div>
-        	
-        			
-			<input type="submit" value="submit"><br>
-		</form>
-		</div>
+			<c:forEach var="listOff" items="${listOff}">
+			<tr>
+				<td><c:out value="${listOff.name}"></c:out></td>
+				<td><c:out value="${listOff.description}"></c:out></td>			
+			</tr>
+			</c:forEach>
+		</table>
 	</div>
 	
 	
 	<!-- Person page -->
 	<div id="Staff" class="tabcontent">
-		<p>The time on the server is ${serverTime}.</p>
-	
-		<h3>List of Staff</h3>
-		<form action="user" method="post">
-			<input type="text" name="userName"><br> 
-			<input type="submit" value="Get List People"><br>
-		</form>
-	
-		
-		
+		<!--<p>The time on the server is ${serverTime}.</p>-->
 		<div>
-    		 
-        	<h2>Add Person</h2>
-        		<div class="container">
-        			<form name="myForm" action="form" onsubmit="return validate()" method="post">
-        			<!-- Person name -->
-        			<div class="row">
-        				<div class="col-25">
-        					<label for="name">Person Name</label>
-        				</div>
-        				<div class="col-75">
-        					<input type="text" id="name" name="userName" placeholder="Enter person name...">
-        				</div>
-        			</div>
-        			
-        			<!-- Person Id -->
-        			<div class="row">
-        				<div class="col-25">
-        					<label for="id">Person Id</label>
-        				</div>
-        				<div class="col-75">
-        					<input type="text" id="id" name="userId" placeholder="Enter person id...">
-        				</div>
-        			</div>
-        			
-        			<!-- Person title -->
-        			<div class="row">
-        				<div class="col-25">
-        					<label for="title">Title</label>
-        				</div>
-        				<div class="col-75">
-        					<input type="text" id="title" name="title">
-        				</div>
-        			</div>
-        			
-        			<!-- Person birthday -->
-        			<div class="row">
-        				<div class="col-25">
-        					<label for="birthday">Birthday</label>
-        				</div>
-        				<div class="col-75">
-        					<input type="text" id="birthday" name="birthday">
-        				</div>
-        			</div>
-        			
-        			<!-- Join -->
-        			<div class="row">
-        				<div class="col-25">
-        					<label for="join">Join</label>
-        				</div>
-        				<div class="col-75">
-        					<input type="text" id="join" name="join">
-        				</div>
-        			</div>
-        			
-        			<!-- Status -->
-        			<div class="row">
-        				<div class="col-25">
-        					<label for="status">Status</label>
-        				</div>
-        				<div class="col-75">
-        					<input type="text" id="status" name="status">
-        				</div>
-        			</div>
-        			<div class = "row">
-        				<input type="submit" value="Submit">
-        			</div>
-        			</form>
-        		</div>
-		</div>
-		
-		<!-- Search person -->
-		<div>
-			<h2>Search person</h2>
-			<form action="searchPerson" method="get">
-				Name: <input type="text" name="userName">
-				<input type="submit" value="Submit">
-			</form>
-		</div>
-		
-		<!-- Update person -->
-		<h2>Update person</h2>
-		<div class="container">
+			<table id="customers">
+				<tr>
+					<th>Name</th>
+					<th>ID</th>
+					<th>Title</th>
+					<th>Birthday</th>
+					<th>Join</th>
+					<th>Status</th>
+				</tr>
 			
-			<form name="myForm" action="form" onsubmit="return validate()" method="get">
-        			<!-- Person name -->
-        			<div class="row">
-        				<div class="col-25">
-        					<label for="name">Person Name</label>
-        				</div>
-        				<div class="col-75">
-        					<input type="text" id="name" name="userName" placeholder="Enter person name...">
-        				</div>
-        			</div>
-        			
-        			<!-- Person Id -->
-        			<div class="row">
-        				<div class="col-25">
-        					<label for="id">Person Id</label>
-        				</div>
-        				<div class="col-75">
-        					<input type="text" id="id" name="userId" placeholder="Enter person id...">
-        				</div>
-        			</div>
-        			
-        			<!-- Person title -->
-        			<div class="row">
-        				<div class="col-25">
-        					<label for="title">Title</label>
-        				</div>
-        				<div class="col-75">
-        					<input type="text" id="title" name="title">
-        				</div>
-        			</div>
-        			
-        			<!-- Person birthday -->
-        			<div class="row">
-        				<div class="col-25">
-        					<label for="birthday">Birthday</label>
-        				</div>
-        				<div class="col-75">
-        					<input type="text" id="birthday" name="birthday">
-        				</div>
-        			</div>
-        			
-        			<!-- Join -->
-        			<div class="row">
-        				<div class="col-25">
-        					<label for="join">Join</label>
-        				</div>
-        				<div class="col-75">
-        					<input type="text" id="join" name="join">
-        				</div>
-        			</div>
-        			
-        			<!-- Status -->
-        			<div class="row">
-        				<div class="col-25">
-        					<label for="status">Status</label>
-        				</div>
-        				<div class="col-75">
-        					<input type="text" id="status" name="status">
-        				</div>
-        			</div>
-        			<input type="submit" value="Update"><br>
-        			</form>
-		</div>
-		
-		<!-- Remove person -->
-		<div>
-			<h2>Remove person</h2>
-			<form action="remove" method="get">
-				Person Id:	<input type="text" name="userId">
-				<input type="submit" value="Remove"><br>
-			</form>
+				<c:forEach var="listUser" items="${printPerson}">
+				<tr>
+					<td><c:out value="${listUser.userName}"></c:out></td>
+					<td><c:out value="${listUser.userId}"></c:out></td>
+					<td><c:out value="${listUser.title}"></c:out></td>
+					<td><c:out value="${listUser.birthday}"></c:out></td>
+					<td><c:out value="${listUser.join}"></c:out></td>
+					<td><c:out value="${listUser.status}"></c:out></td>
+				</tr>
+				</c:forEach>
+			
+			</table>
 		</div>
 	</div>
 	
 	<!-- Technology page -->
 	<div id="Technologies" class="tabcontent">
-		<p>The time on the server is ${serverTime}.</p>
+		<table id="customers">
+			<tr>
+				<th>Technology name</th>
+				<th>Description</th>
+				<th>Category</th>
+				<th>Domain</th>
+				
+			</tr>
 		
-		<div>
-			<h2>Add Technology</h2>
-			<div class="container">
-			<form action="techForm" method="get">
-				<!-- Tech name -->
-				<div class="row">
-        			<div class="col-25">
-        				<label for="techName">Technology name</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="techName" name="techName" placeholder="Enter name of technology...">
-        			</div>
-        		</div>
-        	
-				<!-- Tech description -->
-				<div class="row">
-        			<div class="col-25">
-        				<label for="techDescription">Description</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="techDescription" name="techDescription" placeholder="Enter technology description...">
-        			</div>
-        		</div>
-				<!-- Tech category -->
-				<div class="row">
-        			<div class="col-25">
-        				<label for="techCategory">Category</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="techCategory" name="techCategory" placeholder="Enter technology category...">
-        			</div>
-        		</div>
-				<!-- Tech domain -->
-				<div class="row">
-        			<div class="col-25">
-        				<label for="techDomain">Domain</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="techDomain" name="techDomain" placeholder="Enter technology domain...">
-        			</div>
-        		</div>
-				<input type="submit" value="submit"><br>
-			</form>
-			</div>
-		</div>
+			<c:forEach var="listTech" items="${listTech}">
+			<tr>
+				<td><c:out value="${listTech.techName}"></c:out></td>
+				<td><c:out value="${listTech.techDescription}"></c:out></td>
+				<td><c:out value="${listTech.techCategory}"></c:out></td>
+				<td><c:out value="${listTech.techDomain}"></c:out></td>
+			</tr>
+			</c:forEach>
 		
-		<!-- Remove Technology -->
-		<div>
-			<h2>Remove technology</h2>
-			<form action="removeTech" method="get">
-				Technology Name:	<input type="text" name="techName">
-				<input type="submit" value="Remove"><br>
-			</form>
-		</div>
-		
-		<!-- Search tech -->
-		<div>
-			<h2>Search Technology</h2>
-			<form action="searchTech" method="get">
-				Name: <input type="text" name="techName">
-				<input type="submit" value="Search">
-			</form>
-		</div>
-		
-		<!-- Update Technology -->
-		<div>
-			<h2>Update Technology</h2>
-			<div class="container">
-			<form action="techForm" method="get">
-				<!-- Tech name -->
-				<div class="row">
-        			<div class="col-25">
-        				<label for="techName">Technology name</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="techName" name="techName" placeholder="Enter name of technology...">
-        			</div>
-        		</div>
-        	
-				<!-- Tech description -->
-				<div class="row">
-        			<div class="col-25">
-        				<label for="techDescription">Description</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="techDescription" name="techDescription">
-        			</div>
-        		</div>
-				<!-- Tech category -->
-				<div class="row">
-        			<div class="col-25">
-        				<label for="techCategory">Category</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="techCategory" name="techCategory">
-        			</div>
-        		</div>
-				<!-- Tech domain -->
-				<div class="row">
-        			<div class="col-25">
-        				<label for="techDomain">Domain</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="techDomain" name="techDomain">
-        			</div>
-        		</div>
-				<input type="submit" value="submit"><br>
-			</form>
-			</div>
-		</div>
-		
+		</table>
 	</div>
 		
 		
 	
 	<!-- Project page -->
 	<div id="Projects" class="tabcontent">
-		<p>The time on the server is ${serverTime}.</p>
+		<table id="customers">	
+			<tr>
+				<th>Project</th>
+				<th>Project ID</th>
+				<th>Status</th>
+				<th>Description</th>
+				<th>Domain</th>
+				<th>Start Date</th>
+				<th>Finish Date</th>
+				<th>Customer</th>
+			</tr>
 		
-		<h2>Add Project</h2>
-		<div class="container">
-        	<form action="project" method="get">
-        		<!-- project name -->
-        		<div class="row">
-        			<div class="col-25">
-        				<label for="project">Project</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="project" name="project" placeholder="Enter project...">
-        			</div>
-        		</div>
-        		<!-- project id -->
-        		<div class="row">
-        			<div class="col-25">
-        				<label for="chargeId">Project Id</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="chargeId" name="chargeid" placeholder="Enter project Id...">
-        			</div>
-        		</div>
-        		<!-- project status -->
-        		<div class="row">
-        			<div class="col-25">
-        				<label for="proStatus">Status</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="proStatus" name="proStatus" placeholder="Enter project status...">
-        			</div>
-        		</div>
-        		<!-- project description -->
-        		<div class="row">
-        			<div class="col-25">
-        				<label for="proDescription">Description</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="proDescription" name="proDescription" placeholder="Enter project description...">
-        			</div>
-        		</div>
-        		<!-- project domain -->
-        		<div class="row">
-        			<div class="col-25">
-        				<label for="proDomain">Domain</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="proDomain" name="proDomain" placeholder="Enter project domain...">
-        			</div>
-        		</div>
-        		<!-- project start date -->
-        		<div class="row">
-        			<div class="col-25">
-        				<label for="startdate">Start Date</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="startdate" name="startdate" placeholder="Project start from...">
-        			</div>
-        		</div>
-        		<!-- project finish date -->
-        		<div class="row">
-        			<div class="col-25">
-        				<label for="finishDate">Finish Date</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="finishdate" name="finishdate" placeholder="To...">
-        			</div>
-        		</div>
-        		<!-- customer -->
-        		<div class="row">
-        			<div class="col-25">
-        				<label for="customer">Customer</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="customer" name="customer" placeholder="Customer...">
-        			</div>
-        		</div>
-        		<input type="submit" value="submit"><br>
-        	</form>
-		</div>
+			<c:forEach var="listTask" items="${listTask}">
+			<tr>
+				<td><c:out value="${listTask.project}"></c:out></td>
+				<td><c:out value="${listTask.chargeid}"></c:out></td>
+				<td><c:out value="${listTask.proStatus}"></c:out></td>
+				<td><c:out value="${listTask.proDescription}"></c:out></td>
+				<td><c:out value="${listTask.proDomain}"></c:out></td>
+				<td><c:out value="${listTask.startdate}"></c:out></td>
+				<td><c:out value="${listTask.finishdate}"></c:out></td>
+				<td><c:out value="${listTask.customer}"></c:out></td>
+			</tr>
+			</c:forEach>
 		
-		<!-- Remove project -->
-		<div>
-			<h2>Remove project</h2>
-			<form action="removeProject" method="get">
-				Project name:	<input type="text" name="project">
-				<input type="submit" value="Remove"><br>
-			</form>
-		</div>
-		
-		<!-- Search project -->
-		<div>
-			<h2>Search Project</h2>
-			<form action="searchProject" method="get">
-				ID of project: <input type="text" name="chargeid">
-				<input type="submit" value="Search">
-			</form>
-		</div>
-		
-		<!-- Update project -->
-		<h2>Update Project</h2>
-		<div class="container">
-        	<form action="project" method="get">
-        		<!-- project name -->
-        		<div class="row">
-        			<div class="col-25">
-        				<label for="project">Project</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="project" name="project" placeholder="Enter project...">
-        			</div>
-        		</div>
-        		<!-- project id -->
-        		<div class="row">
-        			<div class="col-25">
-        				<label for="chargeid">Project Id</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="chargeid" name="chargeid" placeholder="Enter project Id...">
-        			</div>
-        		</div>
-        		<!-- project status -->
-        		<div class="row">
-        			<div class="col-25">
-        				<label for="proStatus">Status</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="proStatus" name="proStatus">
-        			</div>
-        		</div>
-        		<!-- project description -->
-        		<div class="row">
-        			<div class="col-25">
-        				<label for="proDescription">Description</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="proDescription" name="proDescription">
-        			</div>
-        		</div>
-        		<!-- project domain -->
-        		<div class="row">
-        			<div class="col-25">
-        				<label for="proDomain">Domain</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="proDomain" name="proDomain">
-        			</div>
-        		</div>
-        		<!-- project start date -->
-        		<div class="row">
-        			<div class="col-25">
-        				<label for="startdate">Start Date</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="startdate" name="startdate">
-        			</div>
-        		</div>
-        		<!-- project finish date -->
-        		<div class="row">
-        			<div class="col-25">
-        				<label for="finishdate">Finish Date</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="finishdate" name="finishdate">
-        			</div>
-        		</div>
-        		<!-- customer -->
-        		<div class="row">
-        			<div class="col-25">
-        				<label for="customer">Customer</label>
-        			</div>
-        			<div class="col-75">
-        				<input type="text" id="customer" name="customer">
-        			</div>
-        		</div>
-        		<input type="submit" value="submit"><br>
-        	</form>
-		</div>
+		</table>
 	</div>
 	
 	<!-- Relationship page -->
@@ -730,12 +308,6 @@ input[type = submit]:hover{
 		<!-- Search person by relationship -->
 		<p>Search person by relationship</p>
 		<form action="searchPersonByRela" method="get">
-<!-- 			<select name="carlist" form="carform"> -->
-<!-- 			  <option value="volvo">Volvo</option> -->
-<!-- 			  <option value="saab">Saab</option> -->
-<!-- 			  <option value="opel">Opel</option> -->
-<!-- 			  <option value="audi">Audi</option> -->
-<!-- 			</select> -->
 			<select name="relation">
 				<option value="BELONG_TO">BELONG_TO</option>
 				<option value="WORK_IN">WORK_IN</option>

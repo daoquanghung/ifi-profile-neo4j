@@ -39,7 +39,6 @@ public class Person {
     		}
     	}
     }
-    
    
     public User addPersonName(String name){
     	User user = new User();
@@ -94,7 +93,7 @@ public class Person {
 			try(Transaction tx = session.beginTransaction()){
 				tx.run("MATCH (p:Person{name: $name}) " +
 						"SET p.birthday= $birthday", //"SET p.birthday= "+birthday ,
-						parameters("name", name, "birthday",birthday+""));
+						parameters("name", name, "birthday",birthday));
 				tx.success();
 			}
 		}
@@ -180,6 +179,7 @@ public class Person {
     			 tmpUser.setUserName(record.get("name").asString());
     			 tmpUser.setUserId(record.get("id").asString());
     			 tmpUser.setTitle(record.get("title").asString());
+    			 // Catch exception if input value is a string  
     			 try{
     				 tmpUser.setBirthday(record.get("birthday").asInt());
     			 } catch (Exception ex){
@@ -201,6 +201,44 @@ public class Person {
         
         return user;
     }
+    
+    // print person
+    public List<User> printPerson(){
+    	List<User> user = new ArrayList<User>();
+    	 try (Session session = driver.session()){
+        	 StatementResult result = session.run(
+                     "MATCH (a:Person) RETURN a.name AS name, a.id AS id, a.title AS title, a.birthday AS birthday, a.join AS join, a.status AS status"
+                     );
+             // Each Cypher execution returns a stream of records.
+        	while(result.hasNext()){
+        		 Record record = result.next();
+        		 User tmpUser = new User();
+        		 
+    			 tmpUser.setUserName(record.get("name").asString());
+    			 tmpUser.setUserId(record.get("id").asString());
+    			 tmpUser.setTitle(record.get("title").asString());
+    			 // Catch exception if input value is a string  
+    			 try{
+    				 tmpUser.setBirthday(record.get("birthday").asInt());
+    			 } catch (Exception ex){
+    				 tmpUser.setBirthday(Integer.parseInt(record.get("birthday").asString()));
+    			 }
+    			 try{
+    				 tmpUser.setJoin(record.get("join").asInt());
+    			 } catch (Exception ex){
+    				 tmpUser.setJoin(Integer.parseInt(record.get("join").asString()));
+    			 }
+	   			 
+    			 tmpUser.setStatus(record.get("status").asString());
+    			 
+    			 user.add(tmpUser);
+        		
+        	 }
+             
+        }
+    	return user;
+    }
+    
     
     
      
