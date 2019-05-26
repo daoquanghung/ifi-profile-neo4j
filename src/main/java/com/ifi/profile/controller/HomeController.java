@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ifi.profile.model.Field;
+
 import com.ifi.profile.model.Node;
 import com.ifi.profile.service.NeoService;
 import com.ifi.profile.utils.Constants;
@@ -27,11 +27,16 @@ public class HomeController {
 				
 		// list nodes
 		List<Node> listNodes = neoService.getListNodes();
-				
+		List<Node> listProjects = neoService.getListProjects();
+		List<Node> listTechnologies = neoService.getListTechnologies();
+		List<Node> listDepartments = neoService.getListDepartments();
 		neoService.close();
 		
 		ModelAndView modelRet = new ModelAndView("home");
         modelRet.addObject("lists", listNodes);
+        modelRet.addObject("listProjects", listProjects);
+        modelRet.addObject("listTechnologies", listTechnologies);
+        modelRet.addObject("listDepartments", listDepartments);
 		return modelRet;
 	}
 
@@ -55,6 +60,23 @@ public class HomeController {
         // render view
         ModelAndView modelRet = new ModelAndView("home");
         modelRet.addObject("lists", listPeople);
+		return modelRet;
+	}
+	
+	// Delete node
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	public ModelAndView delete(@Validated Node node){
+		// connect to Neo4j database
+		NeoService neoService = new NeoService(Constants.URL_IFI, Constants.USER_IFI, Constants.PASS_IFI);
+		
+		if((!"".equals(node.getTypeNode()))&&(node.getTypeNode()!=null)&&(node.getLabelNode()!=null)&&(!"".equals(node.getLabelNode()))){
+			neoService.deleteNode(node);
+		} else {
+			
+		}
+		
+		ModelAndView modelRet = new ModelAndView("home");
+		
 		return modelRet;
 	}
 }
