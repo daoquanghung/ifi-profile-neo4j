@@ -4,6 +4,7 @@ import static org.neo4j.driver.Values.parameters;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
@@ -149,8 +150,48 @@ public class NeoService {
     	return list;
     }
     
-    // get list person
+    // get list nodes
     public List<Node> getListNodes()
+    {
+    	List<Node> ret = new ArrayList<Node>();
+        try (Session session = driver.session())
+        {
+            // Auto-commit transactions are a quick and easy way to wrap a read.
+            StatementResult result = session.run(
+                    "MATCH (n) RETURN n as obj");
+            // Each Cypher execution returns a stream of records.
+            while (result.hasNext())
+            {
+            	Node tmpUser = new Node();
+                Record record = result.next();
+                // Values can be extracted from a record by index or name.
+                try {
+                	Map<String, Object> tmMap = record.get("obj").asMap();
+                	if (tmMap.get("name") != null){
+                		tmpUser.setLabelNode(tmMap.get("name").toString());
+                	}
+                	
+                	List<Field> listFields = new ArrayList<Field>();
+                	for(Map.Entry entry:tmMap.entrySet()){
+                		Field tmpField = new Field();
+                		tmpField.setKey(entry.getKey().toString());
+                        tmpField.setValue(entry.getValue().toString());
+                        listFields.add(tmpField);
+                	}
+                	tmpUser.setListFields(listFields);
+                } catch (Exception ex) {
+                	System.out.println("Error:"+ex.getMessage());
+                }
+                
+                ret.add(tmpUser);
+            }
+        }
+        
+        return ret;
+    }
+    
+ // get list person
+    public List<Node> getListPerson()
     {
     	List<Node> ret = new ArrayList<Node>();
         try (Session session = driver.session())

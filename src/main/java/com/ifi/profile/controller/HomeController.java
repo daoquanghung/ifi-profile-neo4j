@@ -27,16 +27,12 @@ public class HomeController {
 				
 		// list nodes
 		List<Node> listNodes = neoService.getListNodes();
-		List<Node> listProjects = neoService.getListProjects();
-		List<Node> listTechnologies = neoService.getListTechnologies();
-		List<Node> listDepartments = neoService.getListDepartments();
+
 		neoService.close();
 		
 		ModelAndView modelRet = new ModelAndView("home");
         modelRet.addObject("lists", listNodes);
-        modelRet.addObject("listProjects", listProjects);
-        modelRet.addObject("listTechnologies", listTechnologies);
-        modelRet.addObject("listDepartments", listDepartments);
+
 		return modelRet;
 	}
 
@@ -53,13 +49,13 @@ public class HomeController {
 		}
 		
 		// get list nodes
-		List<Node> listPeople = neoService.getListNodes();
+		List<Node> listNodes = neoService.getListNodes();
 		
         neoService.close();
         
         // render view
         ModelAndView modelRet = new ModelAndView("home");
-        modelRet.addObject("lists", listPeople);
+        modelRet.addObject("lists", listNodes);
 		return modelRet;
 	}
 	

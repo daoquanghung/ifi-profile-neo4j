@@ -112,7 +112,8 @@ body {
 				    </thead>
 				    <tbody>
 				      <c:forEach var="listValue" items="${lists}" varStatus="count">
-				      <tr data-toggle="modal" data-target="#ifiModal" class="idClass" data-id="${listValue.labelNode}">
+				      <tr data-toggle="modal" data-target="#ifiModal" class="idClass" data-id="${listValue.labelNode}" 
+	      					data-list="<c:forEach var="field" items="${listValue.listFields}">${field.key}:${field.value}*+*+</c:forEach>">
 						  <td>${count.index+1}</td>
 						  <td>${listValue.labelNode}</td>
 				      </tr>
@@ -176,9 +177,34 @@ body {
 	}
 	$(function () {
         $(".idClass").click(function () {
-            var my_id_value = $(this).data('id');
-            $("#hiddenValue").val(my_id_value);
-            $("#labelNode").text(my_id_value);
+        	var my_id_value = $(this).data('id');
+            var list = $(this).data('list');
+            $("#name-node").text(my_id_value + ' detail');
+
+            var body = document.getElementById("modal-body");    	    
+    	    body.innerHTML = '';
+            
+    	    var tbl  = document.createElement('table');
+    	    tbl.style.border = '1px solid gray';
+    	    
+            while (list.length > 0){
+            	var n = list.indexOf("*+*+");
+				var rowText = list.substring(0, n);
+            	
+            	var tr = tbl.insertRow();
+                var td = tr.insertCell();
+                var m = list.indexOf(":");
+                td.appendChild(document.createTextNode(rowText.substring(0, m)));
+                td.style.border = '1px solid gray';
+//                 td.style.width  = '100px';
+                rowText = rowText.substring(m+1, rowText.length);
+                var td = tr.insertCell();
+                td.appendChild(document.createTextNode(rowText));
+                td.style.border = '1px solid gray';
+
+				list = list.substring(n+4, list.length);
+            }
+            body.appendChild(tbl);
         })
     });
 	</script>
@@ -190,12 +216,12 @@ body {
 	
 	      <!-- Modal Header -->
 	      <div class="modal-header">
-	        <h4 class="modal-title">Node Detail</h4>
+	        <h4 id="name-node" class="modal-title">Node Detail</h4>
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
 	      </div>
 	
 	      <!-- Modal body -->
-	      <div class="modal-body">
+	      <div id="modal-body" class="modal-body">
 	        <label id="labelNode"></label>
 	      </div>
 	
