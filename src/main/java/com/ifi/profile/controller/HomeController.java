@@ -27,16 +27,12 @@ public class HomeController {
 				
 		// list nodes
 		List<Node> listNodes = neoService.getListNodes();
-		List<Node> listProjects = neoService.getListProjects();
-		List<Node> listTechnologies = neoService.getListTechnologies();
-		List<Node> listDepartments = neoService.getListDepartments();
+
 		neoService.close();
 		
 		ModelAndView modelRet = new ModelAndView("home");
         modelRet.addObject("lists", listNodes);
-        modelRet.addObject("listProjects", listProjects);
-        modelRet.addObject("listTechnologies", listTechnologies);
-        modelRet.addObject("listDepartments", listDepartments);
+
 		return modelRet;
 	}
 
@@ -53,30 +49,37 @@ public class HomeController {
 		}
 		
 		// get list nodes
-		List<Node> listPeople = neoService.getListNodes();
+		List<Node> listNodes = neoService.getListNodes();
 		
         neoService.close();
         
         // render view
         ModelAndView modelRet = new ModelAndView("home");
-        modelRet.addObject("lists", listPeople);
+        modelRet.addObject("lists", listNodes);
 		return modelRet;
 	}
 	
-	// Delete node
-	@RequestMapping(value = "/delete", method = RequestMethod.POST)
-	public ModelAndView delete(@Validated Node node){
-		// connect to Neo4j database
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public ModelAndView search(@Validated Node node){
 		NeoService neoService = new NeoService(Constants.URL_IFI, Constants.USER_IFI, Constants.PASS_IFI);
 		
-		if((!"".equals(node.getTypeNode()))&&(node.getTypeNode()!=null)&&(node.getLabelNode()!=null)&&(!"".equals(node.getLabelNode()))){
-			neoService.deleteNode(node);
-		} else {
-			
-		}
+		List<Node> lists = neoService.searchNode(node.getLabelNode());
 		
-		ModelAndView modelRet = new ModelAndView("home");
+		neoService.close();
+		ModelAndView modelRet = new ModelAndView("search");
+		modelRet.addObject("listSearch", lists);
+		return modelRet;
+	}
+	
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public ModelAndView update(@Validated Node node){
+		NeoService neoService = new NeoService(Constants.URL_IFI, Constants.USER_IFI, Constants.PASS_IFI);
+		
+		
+		neoService.close();
+		ModelAndView modelRet = new ModelAndView("update");
 		
 		return modelRet;
 	}
+	
 }

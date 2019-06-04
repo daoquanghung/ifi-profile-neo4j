@@ -9,6 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -89,6 +90,12 @@ body {
 		<div class="container">
 		<h1>IFI Profile</h1>
 			<div class="row">
+				<div>
+				<form action="search" id="search" method="post">
+					<input type="text" name="labelNode">
+					<input type="submit" value="Search">
+				</form>
+				</div>
 				<div class="col-sm-6">
 				<form id="form" action="add" method="post">
 					<input type="submit" value="Create Node"><br>
@@ -111,15 +118,23 @@ body {
 				      </tr>
 				    </thead>
 				    <tbody>
+				    <!-- use two-dimensional array to get value of node and field -->
 				      <c:forEach var="listValue" items="${lists}" varStatus="count">
-				      <tr data-toggle="modal" data-target="#ifiModal" class="idClass" data-id="${listValue.labelNode}">
+				      <tr data-toggle="modal" data-target="#ifiModal" class="idClass" data-id="${listValue.labelNode}" 
+	      					data-list="<c:forEach var="field" items="${listValue.listFields}">${field.key}:${field.value}*+*+</c:forEach>">
 						  <td>${count.index+1}</td>
 						  <td>${listValue.labelNode}</td>
+						  <td><button class="btn-remove"><i class="fas fa-trash-alt"></i></button></td>
+						  <td><button class="btn-update"><i class="fas fa-pen"></i></button></td>
 				      </tr>
 				      </c:forEach>
 				    </tbody>
 					</table>
 				</c:if>
+				</div>
+				
+				<div>
+					
 				</div>
 			</div>
 		</div>
@@ -176,9 +191,52 @@ body {
 	}
 	$(function () {
         $(".idClass").click(function () {
-            var my_id_value = $(this).data('id');
-            $("#hiddenValue").val(my_id_value);
-            $("#labelNode").text(my_id_value);
+        	var my_id_value = $(this).data('id');
+            var list = $(this).data('list');
+            $("#name-node").text(my_id_value + ' detail');
+
+            var body = document.getElementById("modal-body");    	    
+    	    body.innerHTML = '';
+            
+    	    var tbl  = document.createElement('table');
+    	    tbl.style.border = '1px solid gray';
+    	    
+            while (list.length > 0){
+            	var n = list.indexOf("*+*+");
+				var rowText = list.substring(0, n);
+            	
+            	var tr = tbl.insertRow();
+                var td = tr.insertCell();
+                var m = list.indexOf(":");
+                td.appendChild(document.createTextNode(rowText.substring(0, m)));
+                td.style.border = '1px solid gray';
+//                 td.style.width  = '100px';
+                rowText = rowText.substring(m+1, rowText.length);
+                var td = tr.insertCell();
+                td.appendChild(document.createTextNode(rowText));
+                td.style.border = '1px solid gray';
+
+				list = list.substring(n+4, list.length);
+            }
+            body.appendChild(tbl);
+        }) 
+          
+        // update node
+        $(document).on('click','.btn-update',function(event){
+        	
+        	$('#ifiModal').modal('show');
+        })
+        $(".btn-save").click(function(event){
+        	
+        })
+        
+        // remove node
+        $(document).on('click','.btn-remove',function(event){
+        	var tr = $(this).parents("tr");
+        	var result = confirm("Do you want to delete?");
+        	if(result){
+        		tr.remove();
+        	}
         })
     });
 	</script>
@@ -190,19 +248,19 @@ body {
 	
 	      <!-- Modal Header -->
 	      <div class="modal-header">
-	        <h4 class="modal-title">Node Detail</h4>
+	        <h4 id="name-node" class="modal-title">Node Detail</h4>
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
 	      </div>
 	
 	      <!-- Modal body -->
-	      <div class="modal-body">
+	      <div id="modal-body" class="modal-body">
 	        <label id="labelNode"></label>
 	      </div>
 	
 	      <!-- Modal footer -->
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary" >Delete</button>
+	        <button type="button" class="btn btn-primary btn-save" data-dismiss="modal">Save</button>
 	      </div>
 	
 	    </div>

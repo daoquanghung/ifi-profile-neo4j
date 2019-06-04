@@ -4,6 +4,7 @@ import static org.neo4j.driver.Values.parameters;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
@@ -65,31 +66,12 @@ public class NeoService {
         }
     }
     
-    public void deleteNode(Node node){
+    // update node
+    public void updateNode(Node node){
     	try(Session session = driver.session()){
-    		String tmpQuery = "MATCH ("+node.getLabelNode()+" :"+node.getTypeNode();
-    		if((node.getListFields()!=null)&&(!"".equals(node.getListFields()))){
-    			tmpQuery += "{";
-    			for(Field field : node.getListFields()){
-    				if((field.getKey()!=null)&&(!"".equals(field.getKey()))&&(field.getValue()!=null)){
-    					String tmpStr = field.getKey() + ": " + field.getValue() + ",";
-    					try {
-							Double.parseDouble(field.getValue());
-						} catch (NumberFormatException e) {
-							tmpStr = field.getKey() + ": \'" + field.getValue() + "\',";
-						}
-    					tmpQuery += tmpStr;
-    				}
-    			}
-    			if(",".equals(tmpQuery.substring(tmpQuery.length() - 1))){
-    				tmpQuery = tmpQuery.substring(0, tmpQuery.length() - 1);
-    			}
-    			tmpQuery += "}";
-    		}
-    		tmpQuery +=") DETACH DELETE "+node.getLabelNode()+" ";
+    		
     		try(Transaction tx = session.beginTransaction()){
-    			tx.run(tmpQuery);
-    			tx.success();
+    			
     		}
     	}
     }
@@ -106,50 +88,9 @@ public class NeoService {
     }
     
     
-     // Search person
-    public List<Node> searchDetailPerson(Node node){
-    	List<Node> list = new ArrayList<Node>();
-    	try(Session session = driver.session()){
-    		String tmpQuery = "MATCH ("+node.getLabelNode()+" :"+node.getTypeNode();
-        	if((node.getListFields()!=null)&&(!"".equals(node.getListFields()))){
-        		tmpQuery += " {";
-        		for (Field field : node.getListFields()) {
-        			if((field.getKey()!=null)&&(!"".equals(field.getKey()))&&(field.getValue()!=null)){
-        				String tmpStr = field.getKey() + ": " + field.getValue() + ",";
-        				try {  
-        				    Double.parseDouble(field.getValue());      				    
-        				} catch(NumberFormatException e){  
-        					tmpStr = field.getKey() + ": \'" + field.getValue() + "\',";
-        				}
-        				tmpQuery += tmpStr;
-        			}
-            		
-    			}
-        		if(",".equals(tmpQuery.substring(tmpQuery.length() - 1))){
-        			tmpQuery = tmpQuery.substring(0, tmpQuery.length() - 1);
-        		}
-        		
-        		tmpQuery += "}";
-        	}
-        	
-        	tmpQuery += ") RETURN "+node.getLabelNode()+"";
-    		StatementResult result = session.run(tmpQuery);
-    		
-    		while (result.hasNext()){
-    			Node tmpUser = new Node();
-    			Record record = result.next();
-    			for(Field field : node.getListFields()){
-    				if(field.getValue()!=null){
-    					tmpUser.setLabelNode(record.get(field.getValue()).asString());
-    				}
-    			}
-    			list.add(tmpUser);
-    		}
-    	}
-    	return list;
-    }
+   
     
-    // get list person
+    // get list nodes
     public List<Node> getListNodes()
     {
     	List<Node> ret = new ArrayList<Node>();
@@ -157,7 +98,7 @@ public class NeoService {
         {
             // Auto-commit transactions are a quick and easy way to wrap a read.
             StatementResult result = session.run(
-                    "MATCH (n:Person) RETURN n.name as name");
+                    "MATCH (n) RETURN n as obj");
             // Each Cypher execution returns a stream of records.
             while (result.hasNext())
             {
@@ -165,11 +106,21 @@ public class NeoService {
                 Record record = result.next();
                 // Values can be extracted from a record by index or name.
                 try {
-                	tmpUser.setLabelNode(record.get("name").asString());
-                	System.out.println(record.get("name").asString());
+                	Map<String, Object> tmMap = record.get("obj").asMap();
+                	if (tmMap.get("name") != null){
+                		tmpUser.setLabelNode(tmMap.get("name").toString());
+                	}
+                	
+                	List<Field> listFields = new ArrayList<Field>();
+                	for(Map.Entry entry:tmMap.entrySet()){
+                		Field tmpField = new Field();
+                		tmpField.setKey(entry.getKey().toString());
+                        tmpField.setValue(entry.getValue().toString());
+                        listFields.add(tmpField);
+                	}
+                	tmpUser.setListFields(listFields);
                 } catch (Exception ex) {
-                	System.out.println("name not string:"+ex.getMessage());
-                	tmpUser.setLabelNode(""+record.get("name").asInt());
+                	System.out.println("Error:"+ex.getMessage());
                 }
                 
                 ret.add(tmpUser);
@@ -179,95 +130,56 @@ public class NeoService {
         return ret;
     }
     
-    // get list project
-    public List<Node> getListProjects()
-    {
-    	List<Node> ret = new ArrayList<Node>();
-        try (Session session = driver.session())
-        {
-            // Auto-commit transactions are a quick and easy way to wrap a read.
-            StatementResult result = session.run(
-                    "MATCH (n:Project) RETURN n.project as project");
-            // Each Cypher execution returns a stream of records.
-            while (result.hasNext())
-            {
-            	Node tmpProject = new Node();
-                Record record = result.next();
-                // Values can be extracted from a record by index or name.
-                try {
-                	tmpProject.setLabelNode(record.get("project").asString());
-                	System.out.println(record.get("project").asString());
-                } catch (Exception ex) {
-                	System.out.println("project not string:"+ex.getMessage());
-                	tmpProject.setLabelNode(""+record.get("project").asInt());
-                }
-                
-                ret.add(tmpProject);
-            }
-        }
-        
-        return ret;
+    // search node
+    public List<Node> searchNode(String initial){
+    	List<Node> list = new ArrayList<Node>();
+    	try(Session session = driver.session()){
+       		StatementResult result = session.run(
+    				"MATCH (n) WHERE n.name contains $x RETURN n AS obj", parameters("x",initial));
+    		// Each Cypher execution returns a stream of records.
+    		while(result.hasNext()){
+    			Node tmpNode = new Node();
+    			
+    			Record record = result.next();
+    			// Values can be extracted from a record by index or name.
+    			try {
+    				
+    				// add info taken from record to tmpMap
+					Map<String, Object> tmpMap = record.get("obj").asMap();
+					if(tmpMap.get("name") != null){
+						tmpNode.setLabelNode(tmpMap.get("name").toString());
+					}
+					List<Field> listFields = new ArrayList<Field>();
+					//Converting to Map.Entry so that we can get key and value separately so Elements can traverse in any order  
+					for(Map.Entry entry:tmpMap.entrySet()){
+						// create object field and set value for field
+						Field tmpField = new Field();
+						tmpField.setKey(entry.getKey().toString());
+						tmpField.setValue(entry.getValue().toString());
+						listFields.add(tmpField);
+					}
+					tmpNode.setListFields(listFields);
+				} catch (Exception e) {
+					System.out.println("Error: "+e.getMessage());
+				}
+    			
+    			list.add(tmpNode);
+    		}
+    	}
+    	
+    	return list;
     }
     
-    // get list technology
-    public List<Node> getListTechnologies()
-    {
-    	List<Node> ret = new ArrayList<Node>();
-        try (Session session = driver.session())
-        {
-            // Auto-commit transactions are a quick and easy way to wrap a read.
-            StatementResult result = session.run(
-                    "MATCH (n:Technology) RETURN n.name as name");
-            // Each Cypher execution returns a stream of records.
-            while (result.hasNext())
-            {
-            	Node tmpTechnologies = new Node();
-                Record record = result.next();
-                // Values can be extracted from a record by index or name.
-                try {
-                	tmpTechnologies.setLabelNode(record.get("name").asString());
-                	System.out.println(record.get("name").asString());
-                } catch (Exception ex) {
-                	System.out.println("name not string:"+ex.getMessage());
-                	tmpTechnologies.setLabelNode(""+record.get("name").asInt());
-                }
-                
-                ret.add(tmpTechnologies);
-            }
-        }
-        
-        return ret;
+    // delete node
+    public void deleteNode(Node node){
+    	try(Session session = driver.session()){
+    		List<Node> list = new ArrayList<Node>();
+    		try(Transaction tx = session.beginTransaction()){
+    			
+    		}
+    	}
     }
     
-    // get list department
-    public List<Node> getListDepartments()
-    {
-    	List<Node> ret = new ArrayList<Node>();
-        try (Session session = driver.session())
-        {
-            // Auto-commit transactions are a quick and easy way to wrap a read.
-            StatementResult result = session.run(
-                    "MATCH (n:Department) RETURN n.name as name");
-            // Each Cypher execution returns a stream of records.
-            while (result.hasNext())
-            {
-            	Node tmpDepartment = new Node();
-                Record record = result.next();
-                // Values can be extracted from a record by index or name.
-                try {
-                	tmpDepartment.setLabelNode(record.get("name").asString());
-                	System.out.println(record.get("name").asString());
-                } catch (Exception ex) {
-                	System.out.println("name not string:"+ex.getMessage());
-                	tmpDepartment.setLabelNode(""+record.get("name").asInt());
-                }
-                
-                ret.add(tmpDepartment);
-            }
-        }
-        
-        return ret;
-    }
     public void printPeople(String initial)
     {
         try (Session session = driver.session())
