@@ -13,6 +13,8 @@ import org.neo4j.driver.Record;
 import org.neo4j.driver.Session;
 import org.neo4j.driver.StatementResult;
 import org.neo4j.driver.Transaction;
+import org.neo4j.driver.Value;
+import org.neo4j.driver.types.MapAccessor;
 
 import com.ifi.profile.model.Field;
 import com.ifi.profile.model.Node;
@@ -66,20 +68,39 @@ public class NeoService {
         }
     }
     
-    // update node
-    public void updateNode(Node node){
+    // delete node
+    public void deleteNode(Node node){
     	try(Session session = driver.session()){
-    		
-    		try(Transaction tx = session.beginTransaction()){
-    			
-    		}
-    	}
-    }
-    
-    // Add relationship
-    public void addRelationship(Node node){
-    	try(Session session = driver.session()){
-    		String tmpQuery = "MATCH ";
+    		String tmpQuery = "MATCH ("+node.getLabelNode()+" :"+node.getTypeNode();
+        	if((node.getListFields()!=null)&&(!"".equals(node.getListFields()))){
+        		tmpQuery += " {";
+        		for (Field field : node.getListFields()) {
+        			if((field.getKey()!=null)&&(!"".equals(field.getKey()))&&(field.getValue()!=null)){
+        				String tmpStr = field.getKey() + ": " + field.getValue() + ",";
+        				try {  
+        				    Double.parseDouble(field.getValue());      				    
+        				} catch(NumberFormatException e){  
+        					tmpStr = field.getKey() + ": \'" + field.getValue() + "\',";
+        				}
+        				tmpQuery += tmpStr;
+        				// condition for selecting a key to break the loop 
+        				if(field.getKey().equals("name")||field.getKey().equals("chargeid")){
+        					break;
+        				}
+        			}
+            		
+    			}
+        		if(",".equals(tmpQuery.substring(tmpQuery.length() - 1))){
+        			tmpQuery = tmpQuery.substring(0, tmpQuery.length() - 1);
+        		}
+        		
+        		tmpQuery += "}";
+        	}
+        	
+        	tmpQuery += ")";
+        	String tmpDelete = " DETACH DELETE ("+node.getLabelNode()+")";
+        	tmpQuery += tmpDelete;
+        	System.out.println("tmpQuery: "+tmpQuery);
     		try(Transaction tx = session.beginTransaction()){
     			tx.run(tmpQuery);
     			tx.success();
@@ -87,8 +108,52 @@ public class NeoService {
     	}
     }
     
+    // Add relationship
+    // Cypher code :
+    // match (n:label),(m:label)
+    // where n.key = value and m.key = value
+    // create (n)-[:relation]->(m)
+    public void addRelationship(Node node){
+    	try(Session session = driver.session()){
+    		// select the node that we want to create relationship
+    		String tmpSource = "MATCH ("+node.getLabelNode()+" :"+node.getTypeNode();
+    		tmpSource += "),";
+    		// select the destination node
+    		String tmpDestination = "("+node.getLabelNode()+" :"+node.getTypeNode();
+    		tmpDestination += ")";
+    		// create the condition 
+    		String tmpCondition = "WHERE "+node.getLabelNode()+".";
+    		if((node.getListFields()!=null)&&(!"".equals(node.getListFields()))){
+    			for(Field field : node.getListFields()){
+    				String tmpStr = field.getKey() + "= " + field.getValue() + ",";
+    				tmpCondition += tmpStr;
+    			}
+    		}
+    		tmpCondition += "AND "+node.getLabelNode()+".";
+    		if((node.getListFields()!=null)&&(!"".equals(node.getListFields()))){
+    			for(Field field : node.getListFields()){
+    				String tmpStr = field.getKey() + "= " + field.getValue() + ",";
+    				tmpCondition += tmpStr;
+    			}
+    		}
+    		// create the relationship 
+    		String tmpRelation = "CREATE ("+node.getLabelNode()+")-[r:";
+    		if((node.getRelation()!=null)&&(!"".equals(node.getRelation()))){
+    			String tmpStr = ""+node.getRelation()+"]->("+node.getLabelNode()+")";
+    			tmpRelation += tmpStr;
+    		}
+    		String tmpQuery = tmpSource + tmpDestination + tmpCondition + tmpRelation;
+    		try(Transaction tx = session.beginTransaction()){
+    			tx.run(tmpQuery);
+    			tx.success();
+    		}
+    	}
+    }
     
-   
+    // search by relationship
+    public void showRelationship(Node node){
+    	
+    }
     
     // get list nodes
     public List<Node> getListNodes()
@@ -169,59 +234,7 @@ public class NeoService {
     	
     	return list;
     }
-    
-    // delete node
-    public void deleteNode(Node node){
-    	try(Session session = driver.session()){
-    		List<Node> list = new ArrayList<Node>();
-    		try(Transaction tx = session.beginTransaction()){
-    			
-    		}
-    	}
-    }
-    
-    public void printPeople(String initial)
-    {
-        try (Session session = driver.session())
-        {
-            // Auto-commit transactions are a quick and easy way to wrap a read.
-            StatementResult result = session.run(
-                    "MATCH (a:Person) WHERE a.name STARTS WITH {x} RETURN a.name AS name",
-                    parameters("x", initial));
-            // Each Cypher execution returns a stream of records.
-            while (result.hasNext())
-            {
-                Record record = result.next();
-                // Values can be extracted from a record by index or name.
-                System.out.println(record.get("name").asString());
-            }
-        }
-    }
-    
-    public List<Node> getListPeople(String initial)
-    {
-    	List<Node> ret = new ArrayList<Node>();
-        try (Session session = driver.session())
-        {
-            // Auto-commit transactions are a quick and easy way to wrap a read.
-            StatementResult result = session.run(
-                    "MATCH (a:Person) WHERE a.name STARTS WITH {x} RETURN a.name as name, a.id as id, a as title",
-                    parameters("x", initial));
-            // Each Cypher execution returns a stream of records.
-            while (result.hasNext())
-            {
-            	Node tmpUser = new Node();
-                Record record = result.next();
-                // Values can be extracted from a record by index or name.
-                tmpUser.setLabelNode(record.get("name").asString());
-                ret.add(tmpUser);
-                System.out.println(record.get("title").asMap());
-            }
-        }
-        
-        return ret;
-    }
-
+   
     public void close()
     {
         // Closing a driver immediately shuts down all open connections.

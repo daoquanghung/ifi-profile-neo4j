@@ -8,6 +8,16 @@ public class Node {
 	private String labelNode;
 	
 	private List<Field> listFields;
+	
+	private String relation;
+	
+	public String getRelation() {
+		return relation;
+	}
+
+	public void setRelation(String relation) {
+		this.relation = relation;
+	}
 
 	public String getLabelNode() {
 		return labelNode;

@@ -125,16 +125,12 @@ body {
 						  <td>${count.index+1}</td>
 						  <td>${listValue.labelNode}</td>
 						  <td><button class="btn-remove"><i class="fas fa-trash-alt"></i></button></td>
-						  <td><button class="btn-update"><i class="fas fa-pen"></i></button></td>
+						  <td><button class="btn-update" "><i class="fas fa-pen"></i></button></td>
 				      </tr>
 				      </c:forEach>
 				    </tbody>
 					</table>
 				</c:if>
-				</div>
-				
-				<div>
-					
 				</div>
 			</div>
 		</div>
@@ -161,7 +157,7 @@ body {
 		x.setAttribute("type", "text");
 		x.setAttribute("name", tmpName+"key");
 		x.setAttribute("id","property-key"+i);
-		
+		console.log(x);
 		var y = document.createElement("INPUT");
 		tmpName = "listFields["+i+"].";
 		y.setAttribute("type", "text");
@@ -182,6 +178,36 @@ body {
 		form.appendChild(elem);
 		i++;
 	}
+	
+	function addUpdateField() {
+			
+		var x = document.createElement("INPUT");
+		tmpName = "listFields["+i+"].";
+		x.setAttribute("type", "text");
+		x.setAttribute("name", tmpName+"key");
+		x.setAttribute("id","property-key"+i);
+		console.log(x);
+		var y = document.createElement("INPUT");
+		tmpName = "listFields["+i+"].";
+		y.setAttribute("type", "text");
+		y.setAttribute("name", tmpName+"value");
+		y.setAttribute("id","property-value"+i);
+
+		var elem = document.createElement('br');
+		elem.setAttribute("id","property-br"+i); 
+
+		var form = document.getElementById("formUpdate");
+		form.appendChild(x);
+		form.appendChild(y);
+		var newlabel = document.createElement("Label");
+	    newlabel.innerHTML = "Delete";
+	    newlabel.setAttribute("onclick","deleteField("+i+")");
+	    newlabel.setAttribute("id","property-label"+i);
+	    form.appendChild(newlabel);
+		form.appendChild(elem);
+		i++;
+	}
+	
 	function deleteField(i) {
 		
 		document.getElementById("property-label"+i).remove();
@@ -193,6 +219,7 @@ body {
         $(".idClass").click(function () {
         	var my_id_value = $(this).data('id');
             var list = $(this).data('list');
+           
             $("#name-node").text(my_id_value + ' detail');
 
             var body = document.getElementById("modal-body");    	    
@@ -222,15 +249,12 @@ body {
         }) 
           
         // update node
+       
         $(document).on('click','.btn-update',function(event){
         	
-        	$('#ifiModal').modal('show');
-        })
-        $(".btn-save").click(function(event){
-        	
+        	$("#updateModal").modal('show');
         })
         
-        // remove node
         $(document).on('click','.btn-remove',function(event){
         	var tr = $(this).parents("tr");
         	var result = confirm("Do you want to delete?");
@@ -239,6 +263,8 @@ body {
         	}
         })
     });
+	
+
 	</script>
 
 	<!-- The Modal -->
@@ -260,13 +286,46 @@ body {
 	      <!-- Modal footer -->
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary btn-save" data-dismiss="modal">Save</button>
+	      </div>
+	
+	    </div>
+	  </div>
+	</div>
+	
+		<!-- Modal update -->
+	<div class="modal fade" id="updateModal">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h4 id="name-node" class="modal-title">Node Detail</h4>
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	      </div>
+	
+	      <!-- Modal body -->
+	      <div id="update-body" class="modal-body">
+	        <form id="formUpdate" action="updateNode" method="post">
+					<input class="btn-save" type="submit" value="Save"><br>
+					<p>Type Node:</p>
+					<input type="text" name="typeNode" id="typeNode"><br>
+					<p>Label Node:</p>
+					<input type="text" name="labelNode" id="labelNode"><br>
+					<p>Properties:</p>
+				</form>
+				<button id="addBtn" onclick="addUpdateField()">Add Field</button><br>
+	      </div>
+	
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 	      </div>
 	
 	    </div>
 	  </div>
 	</div>
 
+	
 	<script>
 		function openTab(evt, tabName){
  		 var i, tabcontent, tablinks;

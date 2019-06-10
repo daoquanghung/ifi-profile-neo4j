@@ -59,6 +59,7 @@ public class HomeController {
 		return modelRet;
 	}
 	
+	// Search
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public ModelAndView search(@Validated Node node){
 		NeoService neoService = new NeoService(Constants.URL_IFI, Constants.USER_IFI, Constants.PASS_IFI);
@@ -70,14 +71,34 @@ public class HomeController {
 		modelRet.addObject("listSearch", lists);
 		return modelRet;
 	}
+
+	@RequestMapping(value = "/updateNode", method = RequestMethod.POST)
+	public ModelAndView updateNode(@Validated Node node){
+		NeoService neoService = new NeoService(Constants.URL_IFI, Constants.USER_IFI, Constants.PASS_IFI);
+		// Delete node
+		neoService.deleteNode(node);
+		// Add a new node with update data
+		if((!"".equals(node.getTypeNode()))&&(node.getTypeNode()!=null)&&(node.getLabelNode()!=null)&&(!"".equals(node.getLabelNode()))){
+			neoService.addNode(node);
+		} else {
+			System.out.println("error: node empty");
+		}
+		
+		List<Node> listNodes = neoService.getListNodes();
+		neoService.close();
+		ModelAndView modelRet = new ModelAndView("home");
+		modelRet.addObject("lists", listNodes);
+		return modelRet;
+	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public ModelAndView update(@Validated Node node){
+	@RequestMapping(value = "/relation", method = RequestMethod.GET)
+	public ModelAndView relation(@Validated Node node){
 		NeoService neoService = new NeoService(Constants.URL_IFI, Constants.USER_IFI, Constants.PASS_IFI);
 		
-		
+		neoService.addRelationship(node);
 		neoService.close();
-		ModelAndView modelRet = new ModelAndView("update");
+		
+		ModelAndView modelRet = new ModelAndView();
 		
 		return modelRet;
 	}
