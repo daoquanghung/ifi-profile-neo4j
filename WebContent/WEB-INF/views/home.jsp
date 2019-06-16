@@ -90,10 +90,39 @@ body {
 		<div class="container">
 		<h1>IFI Profile</h1>
 			<div class="row">
-				<div>
+				<div class="col-sm-6">
 				<form action="search" id="search" method="post">
 					<input type="text" name="labelNode">
 					<input type="submit" value="Search">
+				</form>
+				</div>
+				
+				<div class="col-sm-6">
+				<form action="searchByRelation" method="post" id="searchRelation">
+					<select name="typeNode">
+						<option value="">----Node Source----</option>
+						<option value="Person">Person</option>
+						<option value="Project">Project</option>
+						<option value="Department">Department</option>
+						<option value="Technology">Technology</option>
+					</select>
+					<select name="relation">
+						<option value="">---Relationship---</option>
+						<option value="BELONG_TO">BELONG_TO</option>
+						<option value="WORK_IN">WORK_IN</option>
+						<option value="HAS_EXPERIENCE">HAS_EXPERIENCE</option>
+						<option value="USED_IN">USED_IN</option>
+						<option value="LEAD">LEAD</option>
+						<option value="ACCOUNT">ACCOUNT</option>
+					</select>
+					<select name="typeNode" id="show-input" onclick="addSearchField()">
+						<option value="">----Destination----</option>
+						<option value="Person">Person</option>
+						<option value="Project">Project</option>
+						<option value="Department">Department</option>
+						<option value="Technology">Technology</option>
+					</select>
+					<br><input type="submit" value="Search">
 				</form>
 				</div>
 				<div class="col-sm-6">
@@ -125,7 +154,7 @@ body {
 						  <td>${count.index+1}</td>
 						  <td>${listValue.labelNode}</td>
 						  <td><button class="btn-remove"><i class="fas fa-trash-alt"></i></button></td>
-						  <td><button class="btn-update" "><i class="fas fa-pen"></i></button></td>
+						  <td><button class="btn-update" ><i class="fas fa-pen"></i></button></td>
 				      </tr>
 				      </c:forEach>
 				    </tbody>
@@ -168,6 +197,35 @@ body {
 		elem.setAttribute("id","property-br"+i); 
 
 		var form = document.getElementById("form");
+		form.appendChild(x);
+		form.appendChild(y);
+		var newlabel = document.createElement("Label");
+	    newlabel.innerHTML = "Delete";
+	    newlabel.setAttribute("onclick","deleteField("+i+")");
+	    newlabel.setAttribute("id","property-label"+i);
+	    form.appendChild(newlabel);
+		form.appendChild(elem);
+		i++;
+	}
+	
+function addSearchField() {
+		
+		var x = document.createElement("INPUT");
+		tmpName = "listFields["+i+"].";
+		x.setAttribute("type", "text");
+		x.setAttribute("name", tmpName+"key");
+		x.setAttribute("id","property-key"+i);
+		console.log(x);
+		var y = document.createElement("INPUT");
+		tmpName = "listFields["+i+"].";
+		y.setAttribute("type", "text");
+		y.setAttribute("name", tmpName+"value");
+		y.setAttribute("id","property-value"+i);
+
+		var elem = document.createElement('br');
+		elem.setAttribute("id","property-br"+i); 
+
+		var form = document.getElementById("searchRelation");
 		form.appendChild(x);
 		form.appendChild(y);
 		var newlabel = document.createElement("Label");

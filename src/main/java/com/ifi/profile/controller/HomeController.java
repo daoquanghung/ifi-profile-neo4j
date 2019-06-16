@@ -103,4 +103,19 @@ public class HomeController {
 		return modelRet;
 	}
 	
+	@RequestMapping(value = "/searchByRelation", method = RequestMethod.POST)
+	public ModelAndView searchByRelation(@Validated Node node){
+		NeoService neoService = new NeoService(Constants.URL_IFI, Constants.USER_IFI, Constants.PASS_IFI);
+		
+		List<Node> lists = neoService.searchByRelationship(node);
+		List<Node> listNode = neoService.getListNodes();
+		neoService.close();
+		
+		
+		ModelAndView modelRet = new ModelAndView("searchByRelation");
+		modelRet.addObject("lists", lists);
+		modelRet.addObject("listNode", listNode);
+		return modelRet;
+	}
+	
 }

@@ -8,6 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -18,22 +19,26 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-6">
-				<c:if test="${not empty listSearch}">
+				<c:if test="${not empty lists}">
 					<h4>List Nodes:</h4>
 					<table class="table table-hover table-bordered table-striped">
 					<thead>
 				      <tr>
 				        <th>No</th>
 				        <th class="col-md-1">Name</th>
+				        <th>${home.relation}</th>
+				        <th>Project</th>
 				      </tr>
 				    </thead>
 				    <tbody>
 				    <!-- use two-dimensional array to get value of node and field -->
-				      <c:forEach var="listValue" items="${listSearch}" varStatus="count">
+				      <c:forEach var="listValue" items="${lists}" varStatus="count">
 				      <tr data-toggle="modal" data-target="#ifiModal" class="idClass" data-id="${listValue.labelNode}" 
 	      					data-list="<c:forEach var="field" items="${listValue.listFields}">${field.key}:${field.value}*+*+</c:forEach>">
 						  <td>${count.index+1}</td>
 						  <td>${listValue.labelNode}</td>
+						  <td><i class="fas fa-check"></i></td>
+						  <td></td>
 				      </tr>
 				      </c:forEach>
 				    </tbody>
@@ -97,6 +102,7 @@
 	      <!-- Modal footer -->
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary" >Delete</button>
 	      </div>
 	
 	    </div>
