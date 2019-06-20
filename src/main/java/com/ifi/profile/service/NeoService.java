@@ -108,6 +108,60 @@ public class NeoService {
     	}
     }
     
+    // update node 
+    // match (n: Person{name: "Dao Quang Hung"})
+    // set n.tuoi = 35, n.email = 'abc@gmail.com'
+    public void updateNode(Node node){
+    	try(Session session = driver.session()){
+    		String tmpQuery = "MATCH ("+node.getLabelNode()+" :"+node.getTypeNode();
+        	if((node.getListFields()!=null)&&(!"".equals(node.getListFields()))){
+        		tmpQuery += " {";
+        		for (Field field : node.getListFields()) {
+        			if((field.getKey()!=null)&&(!"".equals(field.getKey()))&&(field.getValue()!=null)){
+        				String tmpStr = field.getKey() + ": " + field.getValue() + ",";
+        				try {  
+        				    Double.parseDouble(field.getValue());      				    
+        				} catch(NumberFormatException e){  
+        					tmpStr = field.getKey() + ": \'" + field.getValue() + "\',";
+        				}
+        				tmpQuery += tmpStr;
+        				// condition for selecting a key to break the loop 
+        				if(field.getKey().equals("name")||field.getKey().equals("chargeid")){
+        					break;
+        				}
+        			}
+    			}
+        		if(",".equals(tmpQuery.substring(tmpQuery.length() - 1))){
+        			tmpQuery = tmpQuery.substring(0, tmpQuery.length() - 1);
+        		}
+        		
+        		tmpQuery += "}";
+        	}
+        	tmpQuery += ")";
+        	String tmpUpdate = "SET ";
+        	for (Field field : node.getListFields()){
+        		if((field.getKey()!=null)&&(!"".equals(field.getKey()))&&(field.getValue()!=null)){
+        			String str = node.getLabelNode() + "." + field.getKey() + "=" + field.getValue() + ",";
+        			try {  
+    				    Double.parseDouble(field.getValue());      				    
+    				} catch(NumberFormatException e){  
+    					str = node.getLabelNode() + "." + field.getKey() + "=\'" + field.getValue() + "\',";
+    				}
+        			tmpUpdate += str;
+        		}
+        	}
+        	if(",".equals(tmpUpdate.substring(tmpUpdate.length() - 1))){
+        		tmpUpdate = tmpUpdate.substring(0, tmpUpdate.length() - 1);
+    		}
+        	tmpQuery += tmpUpdate;
+        	System.out.println(tmpQuery);
+    		try(Transaction tx = session.beginTransaction()){
+    			tx.run(tmpQuery);
+    			tx.success();
+    		}
+    	}
+    }
+    
     // Add relationship
     // Cypher code :
     // match (n:label),(m:label)
@@ -215,6 +269,24 @@ public class NeoService {
     	return list;
     }
     
+    // get information of two relationship, advance search node by relationship
+    // Query
+//    match (a:Person)-[]->(t:Technology{name:"Java"})
+//    match (t)-[]->(p:Project)
+//    match (a)-[]->(p)
+//    return p, count(p)
+    public List<Node> getNode(){
+    	List<Node> list = new ArrayList<Node>();
+    	try(Session session = driver.session()){
+    		StatementResult result = session.run("MATCH");
+    		
+    		while(result.hasNext()){
+    			
+    		}
+    	}
+    	return list;
+    }
+    
     // get list nodes
     public List<Node> getListNodes()
     {
@@ -295,24 +367,6 @@ public class NeoService {
     		}
     	}
     	
-    	return list;
-    }
-    
-    // get information of two relationship, advance search node by relationship
-    // Query:
-//    match (n: Person{name:"Nguyen Huu Huong"})-[]->(p:Project)
-//    match (p:Project)<-[]-(t:Technology{name:"JavaScript"})
-//    match (m:Person)-[]->(p:Project)
-//    return p, count(p), m
-    public List<Node> getNode(){
-    	List<Node> list = new ArrayList<Node>();
-    	try(Session session = driver.session()){
-    		StatementResult result = session.run("");
-    		
-    		while(result.hasNext()){
-    			
-    		}
-    	}
     	return list;
     }
    

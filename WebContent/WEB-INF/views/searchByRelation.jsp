@@ -26,7 +26,7 @@
 				      <tr>
 				        <th>No</th>
 				        <th class="col-md-1">Name</th>
-				        <th>${home.relation}</th>
+				        <th>${node.relation}</th>
 				        <th>Project</th>
 				      </tr>
 				    </thead>

@@ -75,11 +75,26 @@ public class HomeController {
 	@RequestMapping(value = "/updateNode", method = RequestMethod.POST)
 	public ModelAndView updateNode(@Validated Node node){
 		NeoService neoService = new NeoService(Constants.URL_IFI, Constants.USER_IFI, Constants.PASS_IFI);
-		// Delete node
-		neoService.deleteNode(node);
-		// Add a new node with update data
+		//update data
 		if((!"".equals(node.getTypeNode()))&&(node.getTypeNode()!=null)&&(node.getLabelNode()!=null)&&(!"".equals(node.getLabelNode()))){
-			neoService.addNode(node);
+			neoService.updateNode(node);
+		} else {
+			System.out.println("error: node empty");
+		}
+		
+		List<Node> listNodes = neoService.getListNodes();
+		neoService.close();
+		ModelAndView modelRet = new ModelAndView("home");
+		modelRet.addObject("lists", listNodes);
+		return modelRet;
+	}
+	
+	@RequestMapping(value = "/deleteNode", method = RequestMethod.GET)
+	public ModelAndView deleteNode(@Validated Node node){
+		NeoService neoService = new NeoService(Constants.URL_IFI, Constants.USER_IFI, Constants.PASS_IFI);
+		//update data
+		if((!"".equals(node.getTypeNode()))&&(node.getTypeNode()!=null)&&(node.getLabelNode()!=null)&&(!"".equals(node.getLabelNode()))){
+			neoService.deleteNode(node);
 		} else {
 			System.out.println("error: node empty");
 		}
